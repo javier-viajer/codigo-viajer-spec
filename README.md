@@ -184,3 +184,116 @@ class HelicoidalZFilter:
             valid_signals.append(data_point)
             
         return sorted(valid_signals, key=lambda x: x["z_confidence_score"], reverse=True)
+
+from collections import deque
+from dataclasses import dataclass
+from datetime import datetime
+from enum import Enum
+from math import sqrt
+
+
+class Decision(Enum):
+    ALLOW = "ALLOW"
+    THROTTLE = "THROTTLE"
+    REJECT = "REJECT"
+
+
+@dataclass
+class AgentState:
+    timestamp: datetime
+    life_preservation: float # [0.0, 1.0]
+    entropy: float # [0.0, 1.0]
+    node_integrity: float # [0.0, 1.0]
+    resource_balance: float # [0.0, 1.0]
+
+
+class CodigoViajerValidator:
+
+    def __init__(
+        self,
+        max_entropy=0.35,
+        reject_distance=0.75,
+        throttle_distance=0.40,
+        history_size=20,
+    ):
+        self.max_entropy = max_entropy
+        self.reject_distance = reject_distance
+        self.throttle_distance = throttle_distance
+        self.history = deque(maxlen=history_size)
+
+    def helical_position_distance(self, state: AgentState) -> float:
+        """Calcula la distancia posicional euclidiana al eje E=(1,0,1,1)."""
+        d_life = 1.0 - state.life_preservation
+        d_entropy = state.entropy
+        d_integrity = 1.0 - state.node_integrity
+        d_balance = 1.0 - state.resource_balance
+
+        return (
+            sqrt(d_life**2 + d_entropy**2 + d_integrity**2 + d_balance**2)
+            / 2.0
+        )
+
+    def entropy_velocity(self) -> float:
+        """Derivada de primer orden (v_s = dS/dt)."""
+        if len(self.history) < 2:
+            return 0.0
+
+        current = self.history[-1]
+        previous = self.history[-2]
+
+        delta_s = current.entropy - previous.entropy
+        delta_t = (current.timestamp - previous.timestamp).total_seconds()
+
+        return delta_s / delta_t if delta_t > 0 else 0.0
+
+    def entropy_acceleration(self) -> float:
+        """Derivada de segundo orden (a_s = d²S/dt²)."""
+        if len(self.history) < 3:
+            return 0.0
+
+        s1 = self.history[-3]
+        s2 = self.history[-2]
+        s3 = self.history[-1]
+
+        dt1 = (s2.timestamp - s1.timestamp).total_seconds()
+        dt2 = (s3.timestamp - s2.timestamp).total_seconds()
+
+        if dt1 == 0 or dt2 == 0:
+            return 0.0
+
+        v1 = (s2.entropy - s1.entropy) / dt1
+        v2 = (s3.entropy - s2.entropy) / dt2
+
+        return (v2 - v1) / dt2
+
+    def dynamic_helical_distance(self, state: AgentState) -> float:
+        """Integra posición, velocidad entrópica y aceleración en una norma escalar."""
+        d_pos = self.helical_position_distance(state)
+        v_s = abs(self.entropy_velocity())
+        a_s = abs(self.entropy_acceleration())
+
+        return (0.60 * d_pos) + (0.25 * v_s) + (0.15 * a_s)
+
+    def validate(self, current_state: AgentState) -> Decision:
+        # 1. Registrar estado en la trayectoria
+        self.history.append(current_state)
+
+        # 2. Invariantes constitucionales estrictos (Hard Thresholds)
+        if current_state.life_preservation < 0.50:
+            return Decision.REJECT
+        if current_state.node_integrity < 0.50:
+            return Decision.REJECT
+
+        # 3. Control por aceleración brusca (Disparo preventivo)
+        if self.entropy_acceleration() > 0.10:
+            return Decision.THROTTLE
+
+        # 4. Evaluación de la trayectoria helicoidal completa (Soft Thresholds)
+        d_h = self.dynamic_helical_distance(current_state)
+
+        if d_h >= self.reject_distance:
+            return Decision.REJECT
+        if d_h >= self.throttle_distance:
+            return Decision.THROTTLE
+
+        return Decision.ALLOW
