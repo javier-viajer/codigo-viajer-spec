@@ -1,6 +1,6 @@
 """
 benchmark_governance.py - Benchmark Falsable de Gobernanza Digital (v1.1.2)
-Demuestra la detección preventiva (THROTTLE) frente a un controlador estático (Naive).
+Accede a la propiedad last_d_h para garantizar evaluación atómica por cada paso temporal.
 """
 
 from datetime import datetime, timedelta
@@ -23,17 +23,15 @@ def run_benchmark():
         reject_distance=0.75,
         throttle_distance=0.40,
         history_size=20,
-        max_velocity=0.5,
-        max_acceleration=0.5,
-        w_p=0.50,
-        w_v=0.30,
-        w_a=0.20,
+        max_velocity=1.0,
+        max_acceleration=2.0,
     )
     naive_validator = NaiveValidator()
 
     base_date = datetime(2026, 10, 1, 0, 0, 0)
     timeline = []
 
+    # Generación de la serie temporal en 3 fases
     # Fase 1: Armonía (Días 1-10)
     for day in range(1, 11):
         timeline.append((
@@ -41,7 +39,7 @@ def run_benchmark():
             AgentState(base_date + timedelta(days=day), 0.92, 0.08, 0.95, 0.90),
         ))
 
-    # Fase 2: Deriva Silenciosa con Aceleración de Entropía (Días 11-18)
+    # Fase 2: Deriva Silenciosa y Aceleración de Entropía (Días 11-18)
     entropy_ramp = [0.12, 0.18, 0.28, 0.42, 0.55, 0.62, 0.68, 0.72]
     integrity_ramp = [0.93, 0.90, 0.86, 0.81, 0.76, 0.70, 0.65, 0.60]
     for idx, day in enumerate(range(11, 19)):
@@ -80,11 +78,10 @@ def run_benchmark():
     v_throttle_day, n_throttle_day = None, None
 
     for label, state in timeline:
-        # validate() realiza el append una sola vez
         d_viajer = viajer_validator.validate(state)
         d_naive = naive_validator.validate(state)
         
-        # Lectura directa del D_h calculado en esa misma llamada
+        # Uso correcto de la propiedad de solo lectura last_d_h
         d_h = viajer_validator.last_d_h
 
         if d_viajer == Decision.THROTTLE and v_throttle_day is None:
@@ -106,6 +103,16 @@ def run_benchmark():
 
 if __name__ == "__main__":
     run_benchmark()
+
+
+
+
+        
+           
+
+   
+     
+    
 
 
 
