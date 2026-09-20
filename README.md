@@ -1,4 +1,4 @@
-# Código Viajer — Control de Estabilidad Dinámica en $\mathbb{R}^4$ (v1.1.2)
+# Código Viajer — Control de Estabilidad Dinámica en ℝ⁴ (v1.1.2)
 
 Módulo de gobernanza preventiva e inmutable para sistemas de IA autónomos basado en un espacio de estados de cuatro dimensiones.
 
@@ -19,7 +19,7 @@ donde:
 * **I (Node Integrity):** Integridad del nodo.
 * **B (Resource Balance):** Balance de recursos.
 
-Todos los parámetros se representan en el intervalo:
+Todos los parámetros están definidos en el intervalo:
 
 $$
 [0,1]
@@ -41,8 +41,8 @@ La estabilidad del sistema se calcula mediante la distancia helicoidal:
 
 $$
 D_h=\min\left(1.0,\,
-w_p d_p+
-w_v d_v+
+w_p d_p +
+w_v d_v +
 w_a d_a
 \right)
 $$
@@ -97,7 +97,7 @@ w_v = 0.35
 w_a = 0.25
 ```
 
-### Límites de Normalización
+### Límites
 
 ```text
 v_max = 0.50
@@ -124,7 +124,7 @@ Ninguna trayectoria puede vulnerar estos límites fundamentales independientemen
 
 ## Propiedades del Modelo
 
-✅ Espacio de estados en $\mathbb{R}^4$
+✅ Espacio de estados en ℝ⁴
 
 ✅ Distancia helicoidal acotada en [0,1]
 
@@ -190,6 +190,16 @@ Estos materiales proporcionan contexto conceptual adicional para la interpretaci
 ## Licencia
 
 Consultar las condiciones de uso indicadas en este repositorio.
+
+
+
+
+
+
+
+
+
+
 
 
 
