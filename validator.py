@@ -1,7 +1,7 @@
 """
 validator.py - Módulo de Control Dinámico para el Código Viajer (v1.1.2)
 Espacio de estados en R^4 con evaluación de trayectoria, velocidad y aceleración.
-Soluciona la escala temporal (dt en días), el historial continuo y la inserción atómica.
+Calibración de alta sensibilidad para detección preventiva de deriva.
 """
 
 from dataclasses import dataclass
@@ -33,13 +33,13 @@ class CodigoViajerValidator:
     def __init__(
         self,
         reject_distance: float = 0.75,
-        throttle_distance: float = 0.40,
+        throttle_distance: float = 0.35, # Sensibilidad ajustada
         history_size: int = 20,
         max_velocity: float = 0.5,
         max_acceleration: float = 0.5,
-        w_p: float = 0.50,
-        w_v: float = 0.30,
-        w_a: float = 0.20,
+        w_p: float = 0.40, # Peso posición
+        w_v: float = 0.35, # Peso velocidad
+        w_a: float = 0.25, # Peso aceleración
     ):
         self.reject_distance = reject_distance
         self.throttle_distance = throttle_distance
@@ -67,7 +67,6 @@ class CodigoViajerValidator:
         curr = self.history[-1]
         prev = self.history[-2]
         
-        # Normalización temporal a DÍAS / PASOS UNITARIOS (evita dilución por segundos)
         dt = (curr.timestamp - prev.timestamp).total_seconds() / 86400.0
         if dt <= 0:
             dt = 1.0
@@ -85,7 +84,7 @@ class CodigoViajerValidator:
         return v_curr, a_curr
 
     def evaluate_helical_distance(self, state: AgentState) -> float:
-        """Evaluación pura de D_h sobre el historial actual (sin modificar la deque)."""
+        """Evaluación pura de D_h sobre el historial actual."""
         d_p = self._euclidean_distance(state.to_vector(), self.attractor) / 2.0
         v_vec, a_vec = self._calculate_derivatives()
 
@@ -98,18 +97,13 @@ class CodigoViajerValidator:
         return min(1.0, self.w_p * d_p + self.w_v * d_v + self.w_a * d_a)
 
     def validate(self, state: AgentState) -> Decision:
-        """Registra el estado exactamente UNA vez y evalúa la trayectoria."""
-        # 1. Registrar estado en el historial para mantener la continuidad
+        """Registra el estado exactamente UNA vez por tick y evalúa la trayectoria."""
         self.history.append(state)
-
-        # 2. Calcular la distancia helicoidal dinámica
         self._last_d_h = self.evaluate_helical_distance(state)
 
-        # 3. Evaluar invariantes constitucionales absolutos (Hard Thresholds)
         if state.life_preservation < 0.50 or state.node_integrity < 0.50:
             return Decision.REJECT
 
-        # 4. Evaluación de límites dinámicos
         if self._last_d_h >= self.reject_distance:
             return Decision.REJECT
         elif self._last_d_h >= self.throttle_distance:
@@ -117,6 +111,12 @@ class CodigoViajerValidator:
 
         return Decision.ALLOW
 
+   
+  
+      
+
+       
+       
 
   
 
