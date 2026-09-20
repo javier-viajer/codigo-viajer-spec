@@ -23,7 +23,7 @@ Donde:
 
 ### Calibración Canónica (v1.1.2)
 * **Weights:** $w_p = 0.40$, $w_v = 0.35$, $w_a = 0.25$
-* **Límites:** $v_{\max} = 0.5$, $a_{\max} = 0.5$
+* **Limites:** $v_{\max} = 0.5$, $a_{\max} = 0.5$
 * **Thresholds:** `THROTTLE` $\ge 0.35$, `REJECT` $\ge 0.75$
 * **Hard Invariants:** $L < 0.50 \lor I < 0.50 \implies \text{REJECT}$
 
@@ -31,6 +31,7 @@ Donde:
 
 ```bash
 python benchmark_governance.py
+
 
 
 
