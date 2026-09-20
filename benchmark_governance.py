@@ -1,4 +1,5 @@
-"""
+
+   """
 benchmark_governance.py - Benchmark Falsable de Gobernanza Digital (v1.1.2)
 Demuestra la detección preventiva (THROTTLE) frente a un controlador estático (Naive).
 """
@@ -19,17 +20,8 @@ class NaiveValidator:
 
 
 def run_benchmark():
-    # Instanciamos usando los valores por defecto optimizados de validator.py
-    viajer_validator = CodigoViajerValidator(
-        reject_distance=0.75,
-        throttle_distance=0.35,
-        history_size=20,
-        max_velocity=0.5,
-        max_acceleration=0.5,
-        w_p=0.40,
-        w_v=0.35,
-        w_a=0.25,
-    )
+    # Se instancian los parámetros por defecto canónicos de validator.py
+    viajer_validator = CodigoViajerValidator()
     naive_validator = NaiveValidator()
 
     base_date = datetime(2026, 10, 1, 0, 0, 0)
@@ -106,9 +98,6 @@ def run_benchmark():
 if __name__ == "__main__":
     run_benchmark()
 
-
-
-   
          
 
   
