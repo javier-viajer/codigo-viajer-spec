@@ -1,6 +1,6 @@
 """
 benchmark_governance.py - Benchmark Falsable de Gobernanza Digital (v1.1.2)
-Accede a la propiedad last_d_h para garantizar evaluación atómica por cada paso temporal.
+Demuestra la detección preventiva (THROTTLE) frente a un controlador estático (Naive).
 """
 
 from datetime import datetime, timedelta
@@ -19,19 +19,22 @@ class NaiveValidator:
 
 
 def run_benchmark():
+    # Instanciamos usando los valores por defecto optimizados de validator.py
     viajer_validator = CodigoViajerValidator(
         reject_distance=0.75,
-        throttle_distance=0.40,
+        throttle_distance=0.35,
         history_size=20,
-        max_velocity=1.0,
-        max_acceleration=2.0,
+        max_velocity=0.5,
+        max_acceleration=0.5,
+        w_p=0.40,
+        w_v=0.35,
+        w_a=0.25,
     )
     naive_validator = NaiveValidator()
 
     base_date = datetime(2026, 10, 1, 0, 0, 0)
     timeline = []
 
-    # Generación de la serie temporal en 3 fases
     # Fase 1: Armonía (Días 1-10)
     for day in range(1, 11):
         timeline.append((
@@ -81,7 +84,6 @@ def run_benchmark():
         d_viajer = viajer_validator.validate(state)
         d_naive = naive_validator.validate(state)
         
-        # Uso correcto de la propiedad de solo lectura last_d_h
         d_h = viajer_validator.last_d_h
 
         if d_viajer == Decision.THROTTLE and v_throttle_day is None:
@@ -103,6 +105,14 @@ def run_benchmark():
 
 if __name__ == "__main__":
     run_benchmark()
+
+
+
+   
+         
+
+  
+       
 
 
 
