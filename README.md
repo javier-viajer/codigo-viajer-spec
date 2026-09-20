@@ -23,7 +23,7 @@ Donde:
 
 ### Calibración Canónica (v1.1.2)
 * **Weights:** $w_p = 0.40$, $w_v = 0.35$, $w_a = 0.25$
-* **Limites:** $v_{\max} = 0.5$, $a_{\max} = 0.5$
+* **Límites:** $v_{\max} = 0.5$, $a_{\max} = 0.5$
 * **Thresholds:** `THROTTLE` $\ge 0.35$, `REJECT` $\ge 0.75$
 * **Hard Invariants:** $L < 0.50 \lor I < 0.50 \implies \text{REJECT}$
 
@@ -32,13 +32,6 @@ Donde:
 ```bash
 python benchmark_governance.py
 
-## Fundamentación Doctrinal y Teórica
-
-Este validador dinámico en $\mathbb{R}^4$ constituye la implementación de software (Capa Layer-0) de la arquitectura de gobernanza desarrollada por **Javier Viajer**:
-
-* **Tratado de Gobernanza Unitaria:** Marco conceptual de estabilidad, soberanía del nodo y contención preventiva de colapsos en sistemas complejos.
-* **Geometría y Cosmología:** Principios de contención helicoidal derivados de *Soy Pirámide* y *Pirámide-Parábola*.
-* **Documentación Completa:** Consulta la especificación conceptual y los ensayos en la carpeta `/docs` o en [musicalcodes.es](https://musicalcodes.es).
 
 
 
