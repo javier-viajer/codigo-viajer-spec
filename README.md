@@ -32,14 +32,27 @@ Donde:
 ```bash
 python benchmark_governance.py
 
-## Fundamentación Doctrinal y Publicaciones
+## Fundamentación Teórica y Recursos Relacionados
 
-Este validador dinámico en $\mathbb{R}^4$ constituye la capa de ejecución (Layer-0) del cuerpo teórico y doctrinal desarrollado por **Javier Viajer**:
+El módulo de validación dinámica en $$\mathbb{R}^4$$ forma parte del ecosistema conceptual y técnico desarrollado por **Javier Viajer**.
 
-* **Tratado de Gobernanza Unitaria:** Marco conceptual y metodológico sobre estabilidad institucional, soberanía del nodo y contención de colapsos en sistemas complejos.
-* **Obras Publicadas (Amazon KDP):** Ensayos y literatura técnica sobre gobernanza y la evolución de los sistemas autónomos, incluyendo *La traición de las IAs (La música del futuro)* y la serie de gobernanza unitaria firmados bajo el sello de autor **Javier Viajer**.
-* **Geometría y Cosmología:** Principios de trayectoria helicoidal basados en las obras *Soy Pirámide* y *Pirámide-Parábola*.
-* **Ecosistema Digital:** Consulta los ensayos de apoyo, la investigación ampliada y los proyectos interactivos en [musicalcodes.es](https://musicalcodes.es) y en el canal oficial de [Patreon](https://www.patreon.com/c/JavierViajer).
+### Marco Teórico
+
+* **Tratado de Gobernanza Unitaria:** Propuesta metodológica orientada al estudio de estabilidad institucional, soberanía nodular y contención de dinámicas de colapso en sistemas complejos.
+
+* **Soy Pirámide** y **Pirámide-Parábola:** Obras que desarrollan los principios geométricos y conceptuales que inspiran la noción de trayectoria helicoidal utilizada como referencia teórica del modelo.
+
+### Publicaciones
+
+* **La traición de las IAs (La música del futuro)**.
+* Serie de ensayos sobre gobernanza unitaria publicados bajo el sello de autor **Javier Viajer**.
+
+### Ecosistema Digital
+
+* Sitio web: [musicalcodes.es](https://musicalcodes.es)
+* Patreon oficial: https://www.patreon.com/c/JavierViajer
+
+Estos materiales proporcionan contexto conceptual adicional para la interpretación de los principios y objetivos del proyecto.
 
 
 
