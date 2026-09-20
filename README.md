@@ -32,6 +32,16 @@ Donde:
 ```bash
 python benchmark_governance.py
 
+## Fundamentación Doctrinal y Publicaciones
+
+Este validador dinámico en $\mathbb{R}^4$ constituye la capa de ejecución (Layer-0) del cuerpo teórico y doctrinal desarrollado por **Javier Viajer**:
+
+* **Tratado de Gobernanza Unitaria:** Marco conceptual y metodológico sobre estabilidad institucional, soberanía del nodo y contención de colapsos en sistemas complejos.
+* **Obras Publicadas (Amazon KDP):** Ensayos y literatura técnica sobre gobernanza y la evolución de los sistemas autónomos, incluyendo *La traición de las IAs (La música del futuro)* y la serie de gobernanza unitaria firmados bajo el sello de autor **Javier Viajer**.
+* **Geometría y Cosmología:** Principios de trayectoria helicoidal basados en las obras *Soy Pirámide* y *Pirámide-Parábola*.
+* **Ecosistema Digital:** Consulta los ensayos de apoyo, la investigación ampliada y los proyectos interactivos en [musicalcodes.es](https://musicalcodes.es) y en el canal oficial de [Patreon](https://www.patreon.com/c/JavierViajer).
+
+
 
 
 
