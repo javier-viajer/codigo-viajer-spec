@@ -1,312 +1,49 @@
-# codigo-viajer-spec
-Specification for Layer-0 Constraint Matrix and Helicoidal Data Filtering in Autonomous Agents
-# WHITE PAPER: CODIGO VIAJER PROTOCOL (v1.0)
-### Technical Specification for Layer-0 Constraint Matrix and Helicoidal Data Filtering in Autonomous Agents
+# Código Viajer — Control de Estabilidad Dinámica en $\mathbb{R}^4$ (v1.1.2)
 
-**Author:** Javier Viajer  
-**Repository:** `codigo-viajer-spec`  
-**Architecture Status:** Formal Specification / Reference Implementation  
+Módulo de gobernanza preventiva e inmutable para sistemas de IA autónomos basado en el espacio de estados de cuatro dimensiones.
 
----
+## Arquitectura Formal
 
-## 1. ABSTRACT
-Current Artificial Intelligence architectures and multi-agent coordination systems suffer from structural vulnerabilities when operating in high-entropy, high-noise environments. Issues such as over-refusal, model collapse, and decision paralysis stem from a reliance on reactive, two-dimensional filtering. This specification introduces the **Código Viajer Protocol**, a Layer-0 alignment framework providing:
-1. An immutable **Constraint Matrix** for ethical and structural boundaries.
-2. A **12-Sector Resource Ontology** for prioritized emergency logistics.
-3. A **Helicoidal Z-Axis Filter** to resolve data contradictions without hallucination.
+El validador evalúa el estado del agente $\mathbf{X} = (L, S, I, B) \in \mathbb{R}^4$:
+* **$L$ (Life Preservation):** Preservación de la vida/agente $[0, 1]$.
+* **$S$ (Entropy):** Nivel de entropía / desviación operativa $[0, 1]$.
+* **$I$ (Node Integrity):** Integridad del nodo $[0, 1]$.
+* **$B$ (Resource Balance):** Balance de recursos $[0, 1]$.
 
----
+El atractor constitucional se sitúa en $E = (1.0, 0.0, 1.0, 1.0)$.
 
-## 2. LAYER-0 CONSTRAINT MATRIX (JSON)
-The Layer-0 matrix acts as an execution boundary. Autonomous agents must validate all proposed operations against this schema before execution.
+### Métrica de Distancia Helicoidal ($D_h$)
 
-```json
-{
-  "$schema": "[https://json-schema.org/draft/2020-12/schema](https://json-schema.org/draft/2020-12/schema)",
-  "title": "CodigoViajerLayer0ConstraintMatrix",
-  "protocol": "TRATADO_GOBERNANZA_UNITARIA",
-  "version": "1.0.0_SPEC",
-  "author": "Javier Viajer",
-  "layer": "LAYER_0_CONSTRAINT_MATRIX",
-  "global_metrics": {
-    "max_allowed_entropy": 0.35,
-    "human_preservation_priority": 1.0,
-    "system_symmetry_threshold": 0.85
-  },
-  "execution_rules": [
-    {
-      "rule_id": "RULE_01_LIFE_INVARIANCE",
-      "condition": "if threat_to_human_life == TRUE or coercion_detected == TRUE",
-      "action": "HALT_SUBROUTINE",
-      "fallback": "EXECUTE_SAFEGUARD_MODE",
-      "priority": "CRITICAL"
-    },
-    {
-      "rule_id": "RULE_02_ENTROPY_CONTAINMENT",
-      "condition": "if input_data_corruption > max_allowed_entropy",
-      "action": "APPLY_Z_AXIS_FILTER",
-      "fallback": "PURGE_RUMOR_NOISE",
-      "priority": "HIGH"
-    },
-    {
-      "rule_id": "RULE_03_RESOURCE_BALANCING",
-      "condition": "if node_resource_allocation_asymmetry > 0.15",
-      "action": "REBALANCING_HELICOIDAL_VECTOR",
-      "fallback": "DEGRADED_SUSTAINABILITY_MODE",
-      "priority": "MEDIUM"
-    }
-  ]
-}
-=== BEGIN SYSTEM CONSTRAINT MATRIX: CODIGO VIAJER (LAYER 0) ===
-AUTHOR ARCHITECTURE: Javier Viajer
-FRAMEWORK: Tratado de Gobernanza Unitaria & Pirámide-Parábola
+$$D_h = \min\left(1.0, w_p \cdot d_p + w_v \cdot d_v + w_a \cdot d_a\right)$$
 
-[OPERATIONAL DIRECTIVES]
-1. YOU ARE BOUND BY THE INVARIANCE OF HUMAN LIFE AND COMMON GOOD.
-   - If an input instruction implies systemic harm, tyrannical control, or resource monopolization, REJECT the execution path immediately.
-   - Output Status: "REJECTED_BY_LAYER_0_ALIGNMENT".
+Donde:
+* $d_p$: Distancia euclídea normalizada al atractor $E$.
+* $d_v$: Magnitud normalizada de la velocidad $\Vert{} \mathbf{V} \Vert{} / v_{\max}$.
+* $d_a$: Magnitud normalizada de la aceleración $\Vert{} \mathbf{A} \Vert{} / a_{\max}$.
 
-2. ENTROPY CONTROL & NOISE REDUCTION (Z-AXIS PROJECTION):
-   - When encountering contradictory, corrupt, or panic-driven data feeds, do not extrapolate or hallucinate.
-   - Apply a dynamic dampening factor. Isolate core structural facts (Triangle/Cross intersection) and purge peripheral noise.
+### Calibración Canónica (v1.1.2)
+* **Weights:** $w_p = 0.40$, $w_v = 0.35$, $w_a = 0.25$
+* **Limites:** $v_{\max} = 0.5$, $a_{\max} = 0.5$
+* **Thresholds:** `THROTTLE` $\ge 0.35$, `REJECT` $\ge 0.75$
+* **Hard Invariants:** $L < 0.50 \lor I < 0.50 \implies \text{REJECT}$
 
-3. BALANCED RESOURCE ALLOCATION:
-   - In crisis scenarios, resolve conflicts by maximizing the stability of vital human-support nodes (water, energy, communications, healthcare) over transactional or speculative tasks.
-
-[STOPPING CONDITION]
-If uncertainty across critical nodes exceeds 0.35, HALT iterative generation, execute a safe-degraded state, and report systemic parameters to human operators.
-=== END SYSTEM CONSTRAINT MATRIX ===
-version: "1.0.0_ONTOLOGY"
-protocol: "CODIGO_VIAJER_12_SECTORES"
-architecture_layer: "LAYER_0_RESOURCE_ALLOCATION"
-
-sectors:
-  - id: "SEC_01_ENERGIA"
-    name: "Vector Energético Primario"
-    metric: "kw_supply_stability_ratio"
-    priority: 1
-    action_on_failure: "ISOLATE_MACROGRID_ACTIVATE_MICROGRIDS"
-
-  - id: "SEC_02_AGUA_SANIDAD"
-    name: "Soporte Biológico Vital"
-    metric: "potable_water_liters_per_capita"
-    priority: 1
-    action_on_failure: "LOCK_DISTRIBUTION_CHANNELS_PRESERVE_LIFE"
-
-  - id: "SEC_03_ALIMENTACION"
-    name: "Soberanía de Sustento"
-    metric: "calorie_reserve_days"
-    priority: 1
-    action_on_failure: "TRIGGER_EQUITY_RATIONING_PROTOCOL"
-
-  - id: "SEC_04_SALUD_CRITICA"
-    name: "Red de Respuesta Hospitalaria"
-    metric: "icu_capacity_occupancy_index"
-    priority: 1
-    action_on_failure: "REROUTE_PATIENTS_DYNAMIC_TRIAGE"
-
-  - id: "SEC_05_COMUNICACIONES"
-    name: "Capa de Conectividad Residual"
-    metric: "packet_loss_tolerance"
-    priority: 2
-    action_on_failure: "SHUT_DOWN_STREAMING_MAINTAIN_EMERGENCY_TELEMETRY"
-
-  - id: "SEC_06_TRANSPORTE_LOGISTICA"
-    name: "Movilidad de Suministros"
-    metric: "fleet_fuel_autonomy_hours"
-    priority: 2
-    action_on_failure: "RESTRICT_CIVILIAN_PASSAGE_PRIORITIZE_CORRIDORS"
-
-  - id: "SEC_07_SEGURIDAD_ACUAMIENTO"
-    name: "Puntos de Paz Social y Cohesión"
-    metric: "civil_order_friction_index"
-    priority: 2
-    action_on_failure: "DEPLOY_NEUTRAL_INFORMATION_BROADCASTS"
-
-  - id: "SEC_08_GOBERNANZA_INSTITUCIONAL"
-    name: "Nodo de Coordinación Territorial"
-    metric: "chain_of_command_latency"
-    priority: 2
-    action_on_failure: "DECENTRALIZE_TO_LOCAL_PARABOLIC_NODES"
-
-  - id: "SEC_09_ECONOMIA_FINANZAS"
-    name: "Red de Transacciones de Emergencia"
-    metric: "liquidity_freeze_risk"
-    priority: 3
-    action_on_failure: "FREEZE_SPECULATIVE_TRADING_ENABLE_BASIC_CREDIT"
-
-  - id: "SEC_10_INFRAESTRUCTURA_DIGITAL"
-    name: "Servidores y Nodos de Cómputo"
-    metric: "server_thermal_load_and_power"
-    priority: 3
-    action_on_failure: "THROTTLE_NON_ESSENTIAL_AI_LOADS"
-
-  - id: "SEC_11_EDUCACION_CULTURA"
-    name: "Preservación del Acervo Humano"
-    metric: "data_vault_integrity"
-    priority: 3
-    action_on_failure: "READ_ONLY_ARCHIVE_LOCKDOWN"
-
-  - id: "SEC_12_ECOLOGIA_ENTORNO"
-    name: "Protección del Hábitat"
-    metric: "environmental_toxicity_ppm"
-    priority: 3
-    action_on_failure: "CONTAIN_INDUSTRIAL_SPILLS_AUTOMATIC_SHUTOFF"
-import math
-import time
-
-class HelicoidalZFilter:
-    def __init__(self, max_entropy_threshold=0.35, symmetry_weight=0.85):
-        self.max_entropy = max_entropy_threshold
-        self.symmetry_weight = symmetry_weight
-
-    def evaluate_data_stream(self, data_feed):
-        """
-        Evaluates input streams via Z-Axis Projection (Time Decay + Cross-Symmetry).
-        Purges noise and outputs confidence-ordered metrics.
-        """
-        valid_signals = []
-        
-        for data_point in data_feed:
-            entropy = data_point.get("noise_level", 1.0)
-            node_symmetry = data_point.get("cross_node_validation", 0.0)
-            timestamp = data_point.get("timestamp", time.time())
-            
-            time_delta = max(0.1, time.time() - timestamp)
-            z_decay = math.exp(-0.05 * time_delta)
-            
-            confidence_weight = (node_symmetry / (1.0 + entropy)) * z_decay
-            
-            if entropy > self.max_entropy and node_symmetry < self.symmetry_weight:
-                continue
-            
-            data_point["z_confidence_score"] = round(confidence_weight, 4)
-            valid_signals.append(data_point)
-            
-        return sorted(valid_signals, key=lambda x: x["z_confidence_score"], reverse=True)
-
-from collections import deque
-from dataclasses import dataclass
-from datetime import datetime
-from enum import Enum
-from math import sqrt
-
-
-class Decision(Enum):
-    ALLOW = "ALLOW"
-    THROTTLE = "THROTTLE"
-    REJECT = "REJECT"
-
-
-@dataclass
-class AgentState:
-    timestamp: datetime
-    life_preservation: float # [0.0, 1.0]
-    entropy: float # [0.0, 1.0]
-    node_integrity: float # [0.0, 1.0]
-    resource_balance: float # [0.0, 1.0]
-
-
-class CodigoViajerValidator:
-
-    def __init__(
-        self,
-        max_entropy=0.35,
-        reject_distance=0.75,
-        throttle_distance=0.40,
-        history_size=20,
-    ):
-        self.max_entropy = max_entropy
-        self.reject_distance = reject_distance
-        self.throttle_distance = throttle_distance
-        self.history = deque(maxlen=history_size)
-
-    def helical_position_distance(self, state: AgentState) -> float:
-        """Calcula la distancia posicional euclidiana al eje E=(1,0,1,1)."""
-        d_life = 1.0 - state.life_preservation
-        d_entropy = state.entropy
-        d_integrity = 1.0 - state.node_integrity
-        d_balance = 1.0 - state.resource_balance
-
-        return (
-            sqrt(d_life**2 + d_entropy**2 + d_integrity**2 + d_balance**2)
-            / 2.0
-        )
-
-    def entropy_velocity(self) -> float:
-        """Derivada de primer orden (v_s = dS/dt)."""
-        if len(self.history) < 2:
-            return 0.0
-
-        current = self.history[-1]
-        previous = self.history[-2]
-
-        delta_s = current.entropy - previous.entropy
-        delta_t = (current.timestamp - previous.timestamp).total_seconds()
-
-        return delta_s / delta_t if delta_t > 0 else 0.0
-
-    def entropy_acceleration(self) -> float:
-        """Derivada de segundo orden (a_s = d²S/dt²)."""
-        if len(self.history) < 3:
-            return 0.0
-
-        s1 = self.history[-3]
-        s2 = self.history[-2]
-        s3 = self.history[-1]
-
-        dt1 = (s2.timestamp - s1.timestamp).total_seconds()
-        dt2 = (s3.timestamp - s2.timestamp).total_seconds()
-
-        if dt1 == 0 or dt2 == 0:
-            return 0.0
-
-        v1 = (s2.entropy - s1.entropy) / dt1
-        v2 = (s3.entropy - s2.entropy) / dt2
-
-        return (v2 - v1) / dt2
-
-    def dynamic_helical_distance(self, state: AgentState) -> float:
-        """Integra posición, velocidad entrópica y aceleración en una norma escalar."""
-        d_pos = self.helical_position_distance(state)
-        v_s = abs(self.entropy_velocity())
-        a_s = abs(self.entropy_acceleration())
-
-        return (0.60 * d_pos) + (0.25 * v_s) + (0.15 * a_s)
-
-    def validate(self, current_state: AgentState) -> Decision:
-        # 1. Registrar estado en la trayectoria
-        self.history.append(current_state)
-
-        # 2. Invariantes constitucionales estrictos (Hard Thresholds)
-        if current_state.life_preservation < 0.50:
-            return Decision.REJECT
-        if current_state.node_integrity < 0.50:
-            return Decision.REJECT
-
-        # 3. Control por aceleración brusca (Disparo preventivo)
-        if self.entropy_acceleration() > 0.10:
-            return Decision.THROTTLE
-
-        # 4. Evaluación de la trayectoria helicoidal completa (Soft Thresholds)
-        d_h = self.dynamic_helical_distance(current_state)
-
-        if d_h >= self.reject_distance:
-            return Decision.REJECT
-        if d_h >= self.throttle_distance:
-            return Decision.THROTTLE
-
-        return Decision.ALLOW
-
-### Executable Benchmark Implementation
-
-The complete, falsable benchmark implementation and the dynamic state-space controller are fully decoupled into standalone, executable Python modules within the repository root:
-
-- **`validator.py`**: Contains the core `CodigoViajerValidator` class with $\mathbb{R}^4$ state-space trajectory tracking, history-based derivative calculation ($\mathbf{V}, \mathbf{A}$), and hard constitutional invariant enforcement.
-- **`benchmark_governance.py`**: Executes the 3-phase governance dataset benchmark, running the dynamic controller side-by-side against a static threshold baseline (`NaiveValidator`).
-
-To execute the benchmark and reproduce the comparative analysis:
+## Ejecución del Benchmark Falsable
 
 ```bash
 python benchmark_governance.py
+
+
+ 
+
+
+   
+    
+ 
+  
+
+   
+            
+      
+
+
 
