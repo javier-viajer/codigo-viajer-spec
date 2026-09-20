@@ -32,6 +32,15 @@ Donde:
 ```bash
 python benchmark_governance.py
 
+## Fundamentación Doctrinal y Teórica
+
+Este validador dinámico en $\mathbb{R}^4$ constituye la implementación de software (Capa Layer-0) de la arquitectura de gobernanza desarrollada por **Javier Viajer**:
+
+* **Tratado de Gobernanza Unitaria:** Marco conceptual de estabilidad, soberanía del nodo y contención preventiva de colapsos en sistemas complejos.
+* **Geometría y Cosmología:** Principios de contención helicoidal derivados de *Soy Pirámide* y *Pirámide-Parábola*.
+* **Documentación Completa:** Consulta la especificación conceptual y los ensayos en la carpeta `/docs` o en [musicalcodes.es](https://musicalcodes.es).
+
+
 
  
 
