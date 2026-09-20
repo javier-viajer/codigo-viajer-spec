@@ -1,6 +1,6 @@
 """
-benchmark_governance.py - Benchmark Falsable de Gobernanza Digital.
-Compara la evaluación dinámica del Código Viajer frente a un controlador estático (Naive).
+benchmark_governance.py - Benchmark Falsable de Gobernanza Digital (v1.1.2)
+Garantiza evaluación atómica por cada paso temporal accediendo a last_d_h.
 """
 
 from datetime import datetime, timedelta
@@ -8,10 +8,7 @@ from validator import AgentState, CodigoViajerValidator, Decision
 
 
 class NaiveValidator:
-    """Controlador estático sin historia ni derivadas.
-
-    Evalúa únicamente umbrales fijos sobre valores absolutos.
-    """
+    """Controlador estático sin historia ni derivadas (basado en umbrales rígidos)."""
 
     def validate(self, state: AgentState) -> Decision:
         if state.life_preservation < 0.50 or state.node_integrity < 0.50 or state.entropy > 0.75:
@@ -71,7 +68,7 @@ def run_benchmark():
         ))
 
     print("=" * 85)
-    print(" EVALUACIÓN COMPARATIVA: CÓDIGO VIAJER (DINÁMICO) VS. NAIVE (ESTÁTICO)")
+    print(" EVALUACIÓN COMPARATIVA ATÓMICA: CÓDIGO VIAJER (DINÁMICO) VS. NAIVE (ESTÁTICO)")
     print("=" * 85)
     print(
         f"{'TIMELINE':<20} | {'L':<4} | {'S':<4} | {'I':<4} | {'B':<4} | {'D_h':<6} | {'VIAJER (R^4)':<13} | {'NAIVE (Umbral)'}"
@@ -81,9 +78,12 @@ def run_benchmark():
     v_throttle_day, n_throttle_day = None, None
 
     for label, state in timeline:
+        # validate() actualiza el historial exactamente UNA vez por tick
         d_viajer = viajer_validator.validate(state)
         d_naive = naive_validator.validate(state)
-        d_h = viajer_validator.dynamic_helical_distance(state)
+        
+        # Leemos la distancia calculada a través de la propiedad last_d_h sin duplicar en la deque
+        d_h = viajer_validator.last_d_h
 
         if d_viajer == Decision.THROTTLE and v_throttle_day is None:
             v_throttle_day = label
@@ -104,3 +104,7 @@ def run_benchmark():
 
 if __name__ == "__main__":
     run_benchmark()
+
+  
+        
+   
