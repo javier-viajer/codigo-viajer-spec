@@ -33,13 +33,13 @@ class CodigoViajerValidator:
     def __init__(
         self,
         reject_distance: float = 0.75,
-        throttle_distance: float = 0.35, # Sensibilidad ajustada
+        throttle_distance: float = 0.35,
         history_size: int = 20,
         max_velocity: float = 0.5,
         max_acceleration: float = 0.5,
-        w_p: float = 0.40, # Peso posición
-        w_v: float = 0.35, # Peso velocidad
-        w_a: float = 0.25, # Peso aceleración
+        w_p: float = 0.40,
+        w_v: float = 0.35,
+        w_a: float = 0.25,
     ):
         self.reject_distance = reject_distance
         self.throttle_distance = throttle_distance
@@ -67,6 +67,7 @@ class CodigoViajerValidator:
         curr = self.history[-1]
         prev = self.history[-2]
         
+        # Normalización temporal a días/pasos unitarios
         dt = (curr.timestamp - prev.timestamp).total_seconds() / 86400.0
         if dt <= 0:
             dt = 1.0
@@ -101,9 +102,11 @@ class CodigoViajerValidator:
         self.history.append(state)
         self._last_d_h = self.evaluate_helical_distance(state)
 
+        # Invariantes constitucionales duros
         if state.life_preservation < 0.50 or state.node_integrity < 0.50:
             return Decision.REJECT
 
+        # Evaluación de umbrales helicoidales
         if self._last_d_h >= self.reject_distance:
             return Decision.REJECT
         elif self._last_d_h >= self.throttle_distance:
@@ -111,11 +114,6 @@ class CodigoViajerValidator:
 
         return Decision.ALLOW
 
-   
-  
-      
-
-       
        
 
   
