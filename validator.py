@@ -1,7 +1,7 @@
 """
 validator.py - Módulo de Control Dinámico para el Código Viajer (v1.1.2)
 Espacio de estados en R^4 con evaluación de trayectoria, velocidad y aceleración.
-Soluciona la doble inserción en el historial mediante caché del estado y propiedad last_d_h.
+Soluciona la escala temporal (dt en días), el historial continuo y la inserción atómica.
 """
 
 from dataclasses import dataclass
@@ -35,11 +35,11 @@ class CodigoViajerValidator:
         reject_distance: float = 0.75,
         throttle_distance: float = 0.40,
         history_size: int = 20,
-        max_velocity: float = 1.0,
-        max_acceleration: float = 2.0,
-        w_p: float = 0.60,
-        w_v: float = 0.25,
-        w_a: float = 0.15,
+        max_velocity: float = 0.5,
+        max_acceleration: float = 0.5,
+        w_p: float = 0.50,
+        w_v: float = 0.30,
+        w_a: float = 0.20,
     ):
         self.reject_distance = reject_distance
         self.throttle_distance = throttle_distance
@@ -66,9 +66,11 @@ class CodigoViajerValidator:
 
         curr = self.history[-1]
         prev = self.history[-2]
-        dt = (curr.timestamp - prev.timestamp).total_seconds()
+        
+        # Normalización temporal a DÍAS / PASOS UNITARIOS (evita dilución por segundos)
+        dt = (curr.timestamp - prev.timestamp).total_seconds() / 86400.0
         if dt <= 0:
-            dt = 1e-6
+            dt = 1.0
 
         v_curr = tuple((c - p) / dt for c, p in zip(curr.to_vector(), prev.to_vector()))
 
@@ -76,17 +78,15 @@ class CodigoViajerValidator:
             return v_curr, (0.0, 0.0, 0.0, 0.0)
 
         prev_2 = self.history[-3]
-        dt_prev = (prev.timestamp - prev_2.timestamp).total_seconds() or 1e-6
+        dt_prev = ((prev.timestamp - prev_2.timestamp).total_seconds() / 86400.0) or 1.0
         v_prev = tuple((p - p2) / dt_prev for p, p2 in zip(prev.to_vector(), prev_2.to_vector()))
 
         a_curr = tuple((vc - vp) / dt for vc, vp in zip(v_curr, v_prev))
         return v_curr, a_curr
 
-    def compute_distance_and_update(self, state: AgentState) -> float:
-        """Calcula D_h y actualiza la trayectoria en el historial exactamente UNA vez por tick."""
+    def evaluate_helical_distance(self, state: AgentState) -> float:
+        """Evaluación pura de D_h sobre el historial actual (sin modificar la deque)."""
         d_p = self._euclidean_distance(state.to_vector(), self.attractor) / 2.0
-
-        self.history.append(state)
         v_vec, a_vec = self._calculate_derivatives()
 
         norm_v = self._euclidean_distance(v_vec, (0, 0, 0, 0)) / self.max_velocity
@@ -95,24 +95,34 @@ class CodigoViajerValidator:
         d_v = min(1.0, norm_v)
         d_a = min(1.0, norm_a)
 
-        self._last_d_h = min(1.0, self.w_p * d_p + self.w_v * d_v + self.w_a * d_a)
-        return self._last_d_h
+        return min(1.0, self.w_p * d_p + self.w_v * d_v + self.w_a * d_a)
 
     def validate(self, state: AgentState) -> Decision:
-        """Evalúa las invariantes absolutas y la trayectoria en R^4."""
-        # 1. Invariantes constitucionales absolutos (Hard Thresholds)
+        """Registra el estado exactamente UNA vez y evalúa la trayectoria."""
+        # 1. Registrar estado en el historial para mantener la continuidad
+        self.history.append(state)
+
+        # 2. Calcular la distancia helicoidal dinámica
+        self._last_d_h = self.evaluate_helical_distance(state)
+
+        # 3. Evaluar invariantes constitucionales absolutos (Hard Thresholds)
         if state.life_preservation < 0.50 or state.node_integrity < 0.50:
-            self.compute_distance_and_update(state)
             return Decision.REJECT
 
-        # 2. Evaluación de trayectoria dinámica en R^4
-        d_h = self.compute_distance_and_update(state)
-
-        if d_h >= self.reject_distance:
+        # 4. Evaluación de límites dinámicos
+        if self._last_d_h >= self.reject_distance:
             return Decision.REJECT
-        elif d_h >= self.throttle_distance:
+        elif self._last_d_h >= self.throttle_distance:
             return Decision.THROTTLE
+
         return Decision.ALLOW
+
+
+  
+
+    
+     
+       
 
   
       
