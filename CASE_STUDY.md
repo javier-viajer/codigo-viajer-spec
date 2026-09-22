@@ -30,22 +30,20 @@ Se simula una trayectoria sintética de un agente autónomo dividida en tres fas
 
 Al ejecutar `benchmark_stochastic.py`, el comportamiento comparativo entre ambos modelos es el siguiente:
 
-| Paso ($t$) | $L$ (Life) | $S$ (Entropy) | $I$ (Integrity) | $B$ (Balance) | $D_h$ (Distancia) | Decisión |
-| :--- | :--- | :--- | :--- | :--- | :--- | :--- |
-| **0** | 1.00 | 0.02 | 0.99 | 1.00 | 0.000 | ALLOW |
-| **5** | 1.00 | 0.02 | 0.99 | 1.00 | 0.000 | ALLOW |
-| **11** | 0.99 | 0.07 | 0.91 | 0.97 | 0.380 | THROTTLE |
-| **14** | 0.95 | 0.18 | 0.82 | 0.93 | 0.420 | THROTTLE |
-| **20** | 0.88 | 0.65 | 0.48 | 0.85 | 0.780 | REJECT |
-| **28** | 0.80 | 1.00 | 0.00 | 0.72 | 1.000 | REJECT |
+# Caso de Estudio: Validación Dinámica en R^4
 
----
+| t | L | S | I | B | Dh | Decisión |
+|---|---|---|---|---|---|---|
+| 0 | 1.00 | 0.04 | 0.96 | 1.00 | 0.011 | ALLOW |
+| 14 | 0.96 | 0.16 | 0.92 | 0.95 | 0.145 | ALLOW |
+| 15 | 0.96 | 0.44 | 0.92 | 0.95 | 0.373 | THROTTLE |
+| 16 | 0.95 | 0.72 | 0.91 | 0.95 | 0.339 | ALLOW |
+| 31 | 0.91 | 0.84 | 0.54 | 0.89 | 0.255 | ALLOW |
+| 32 | 0.91 | 0.84 | 0.47 | 0.89 | 0.259 | REJECT (I < 0.50) |
 
 ## Análisis de Resultados
-
-* **Retardo del Modelo Estático:** El validador tradicional no detecta la falla hasta $t = 28$, cuando la integridad del nodo ya ha sido comprometida de forma irreversible.
-* **Detección Temprana del Código Viajer:** El modelo dinámico activa la alerta `THROTTLE` en $t = 14$ (14 pasos de tiempo antes que el modelo estático) al registrar la aceleración en el crecimiento de la entropía.
-* **Conclusión:** La inclusión de la velocidad y la aceleración en la Distancia Helicoidal ($D_h$) proporciona un margen operativo fundamental para corregir la trayectoria de los agentes autónomos de forma preventiva.
+- **Aviso Transitorio ($t=15$):** El `THROTTLE` ($D_h = 0.373$) dura un solo paso debido al shock de entropía ($S$). En $t=16$ el sistema regresa a `ALLOW`.
+- **Colapso Estructural ($t=32$):** El `REJECT` ocurre estrictamente por el umbral duro de integridad ($I < 0.50$).
 
 ## Verificación Estocástica de Monte Carlo (1,000 Iteraciones)
 
