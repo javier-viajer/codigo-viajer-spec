@@ -28,7 +28,7 @@ Se simula una trayectoria sintética de un agente autónomo dividida en tres fas
 
 ## Resultados del Benchmark
 
-Al ejecutar `benchmark_governance.py`, el comportamiento comparativo entre ambos modelos es el siguiente:
+Al ejecutar `benchmark_stochastic.py`, el comportamiento comparativo entre ambos modelos es el siguiente:
 
 | Paso temporal ($t$) | Estado Real $\mathbf{X}(t)$ | Naive Validator (Estático) | Código Viajer ($D_h$) | Acción del Código Viajer |
 | :--- | :--- | :--- | :--- | :--- |
