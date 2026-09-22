@@ -189,7 +189,7 @@ Estos materiales proporcionan contexto conceptual adicional para la interpretaci
 
 ## Licencia
 
-Consultar las condiciones de uso indicadas en este repositorio.
+Este proyecto se distribuye bajo la Licencia MIT.
 
 ## Caso de Estudio Reproducible
 
