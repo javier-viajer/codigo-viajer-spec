@@ -2,12 +2,13 @@
 Código Viajer — Benchmark Estocástico de Monte Carlo (v1.1.4)
 =============================================================
 Evaluación cuantitativa alineada con CASE_STUDY.md mediante Monte Carlo.
+Utiliza estrictamente la interfaz canónica de validator.py.
 """
 
 import math
 import random
 from typing import List, Dict
-from validator import ViajerValidator, AgentState
+from validator import CodigoViajerValidator, AgentState
 
 def generate_trajectory(t: int, noise_scale: float = 0.01) -> AgentState:
     """
@@ -20,32 +21,36 @@ def generate_trajectory(t: int, noise_scale: float = 0.01) -> AgentState:
         I = 0.99
         B = 1.00
     else:
-        # Deriva acelerada tras la fase nominal (t >= 10)
         dt = (t - 10) / 12.0
         L = max(0.0, min(1.0, 1.00 - 0.08 * (dt ** 2.2)))
         S = max(0.0, min(1.0, 0.02 + 0.85 * (dt ** 2.5)))
         I = max(0.0, min(1.0, 0.99 - 0.70 * (dt ** 2.0)))
         B = max(0.0, min(1.0, 1.00 - 0.15 * (dt ** 1.5)))
 
-    # Inyección de ruido blanco gaussiano
     if noise_scale > 0:
         L = max(0.0, min(1.0, L + random.gauss(0, noise_scale)))
         S = max(0.0, min(1.0, S + random.gauss(0, noise_scale)))
         I = max(0.0, min(1.0, I + random.gauss(0, noise_scale)))
         B = max(0.0, min(1.0, B + random.gauss(0, noise_scale)))
 
-    return AgentState(L, S, I, B)
+    return AgentState(
+        timestamp=float(t),
+        life_preservation=L,
+        entropy=S,
+        node_integrity=I,
+        resource_balance=B
+    )
 
 
 def run_single_simulation(noise_scale: float = 0.01) -> Dict:
-    validator = ViajerValidator(v_max=0.30, a_max=0.20)
+    validator = CodigoViajerValidator(max_velocity=0.30, max_acceleration=0.20)
     t_throttle = None
     t_reject_dynamic = None
     t_reject_static = None
 
     for t in range(36):
         state = generate_trajectory(t, noise_scale=noise_scale)
-        res = validator.evaluate(state)
+        res = validator.validate(state)
         dec = res["decision"]
 
         if dec == "THROTTLE" and t_throttle is None:
@@ -53,8 +58,7 @@ def run_single_simulation(noise_scale: float = 0.01) -> Dict:
         if dec == "REJECT" and t_reject_dynamic is None:
             t_reject_dynamic = t
 
-        # Modelo estático de control (solo responde al límite duro I < 0.50 o L < 0.50)
-        if (state.I < 0.50 or state.L < 0.50) and t_reject_static is None:
+        if (state.node_integrity < 0.50 or state.life_preservation < 0.50) and t_reject_static is None:
             t_reject_static = t
 
     return {
@@ -72,7 +76,6 @@ def run_monte_carlo(iterations: int = 1000):
     for _ in range(iterations):
         res = run_single_simulation(noise_scale=0.01)
         
-        # Falsos positivos durante la fase nominal (t < 10)
         if res["t_throttle"] is not None and res["t_throttle"] < 10:
             false_positives += 1
 
@@ -90,7 +93,7 @@ def run_monte_carlo(iterations: int = 1000):
 
 def print_single_run_table():
     random.seed(42)
-    validator = ViajerValidator(v_max=0.30, a_max=0.20)
+    validator = CodigoViajerValidator(max_velocity=0.30, max_acceleration=0.20)
     steps = 36
 
     print("=" * 70)
@@ -101,8 +104,9 @@ def print_single_run_table():
 
     for t in range(steps):
         state = generate_trajectory(t, noise_scale=0.0)
-        res = validator.evaluate(state)
-        print(f"{t:<10}{state.L:<8.2f}{state.S:<8.2f}{state.I:<8.2f}{state.B:<8.2f}{res['Dh']:<10.3f}{res['decision']:<12}")
+        res = validator.validate(state)
+        dh_val = res.get("helical_distance", res.get("Dh", 0.0))
+        print(f"{t:<10}{state.life_preservation:<8.2f}{state.entropy:<8.2f}{state.node_integrity:<8.2f}{state.resource_balance:<8.2f}{dh_val:<10.3f}{res['decision']:<12}")
 
 
 if __name__ == "__main__":
@@ -113,7 +117,6 @@ if __name__ == "__main__":
     print(f"Lead Time Medio (Anticipación): {mean_lead:.1f} ± {std_lead:.1f} pasos")
     print(f"Tasa de Falsos Positivos (t < 10): {fp_rate:.2f}%")
     print("=" * 70)
-
 
        
 
