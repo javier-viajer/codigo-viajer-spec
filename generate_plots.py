@@ -40,6 +40,9 @@ np.random.seed(42) # Semilla para reproducibilidad del gráfico
 history = []
 
 for t in range(steps):
+    state = generate_trajectory(t, base_time)
+    decision = validator.validate(state)
+    dh = validator.last_d_h
     if t >= 10:
         dt = (t - 10) / 15.0
         L[t] = max(0.0, min(1.0, 1.0 - 0.015 * (dt ** 1.5) + np.random.normal(0, 0.01)))
