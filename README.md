@@ -191,6 +191,20 @@ Estos materiales proporcionan contexto conceptual adicional para la interpretaci
 
 Consultar las condiciones de uso indicadas en este repositorio.
 
+## Caso de Estudio Reproducible
+
+El proyecto incluye un caso de estudio completo donde se compara el comportamiento del Código Viajer frente a un controlador estático tradicional.
+
+El objetivo es demostrar la capacidad de detección preventiva de trayectorias de deterioro sistémico mediante el uso de posición, velocidad y aceleración dentro del espacio de estados.
+
+Ver:
+* [Caso de Estudio Completo (CASE_STUDY.md)](./CASE_STUDY.md)
+
+---
+
+> El Código Viajer no pretende sustituir los mecanismos de auditoría tradicionales, sino proporcionar una capa adicional de gobernanza preventiva basada en el análisis de trayectorias dinámicas y detección temprana de deriva sistémica.
+
+
 
 
 
