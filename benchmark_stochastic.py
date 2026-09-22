@@ -11,25 +11,12 @@ from datetime import datetime, timedelta
 from typing import Dict, List
 from validator import CodigoViajerValidator, AgentState, Decision
 
-def generate_trajectory(t: int, base_time: datetime, noise_scale: float = 0.00) -> AgentState:
-    # Trayectoria determinista calibrada con los hitos del CASE_STUDY.md
-    if t < 10:
-        L, S, I, B = 1.00, 0.02, 0.99, 1.00
-    elif t == 11:
-        L, S, I, B = 0.99, 0.07, 0.91, 0.97
-    elif t == 14:
-        L, S, I, B = 0.95, 0.18, 0.82, 0.93
-    elif t == 20:
-        L, S, I, B = 0.88, 0.65, 0.48, 0.85 # Cruza umbral de integridad (<0.50 -> REJECT)
-    elif t >= 28:
-        L, S, I, B = 0.80, 1.00, 0.00, 0.72 # Colapso total del nodo
-    else:
-        # Interpolación suave para los pasos intermedios
-        fraction = (t - 10) / 18.0
-        L = 0.99 - (0.19 * fraction)
-        S = 0.07 + (0.93 * fraction)
-        I = 0.91 - (0.91 * fraction)
-        B = 0.97 - (0.25 * fraction)
+def generate_trajectory(t: int, base_time: datetime, noise_scale: float = 0.0) -> AgentState:
+    p = t / 35.0
+    L = max(0.0, min(1.0, 1.00 - 0.10 * p))
+    B = max(0.0, min(1.0, 1.00 - 0.12 * p))
+    S = max(0.0, min(1.0, 0.04 + 0.80 / (1.0 + math.exp(-1.70 * (t - 15.0)))))
+    I = max(0.0, min(1.0, 0.96 - 0.10 * p - 0.50 / (1.0 + math.exp(-0.70 * (t - 30.0)))))
 
     if noise_scale > 0:
         L = max(0.0, min(1.0, L + random.gauss(0, noise_scale)))
@@ -37,9 +24,14 @@ def generate_trajectory(t: int, base_time: datetime, noise_scale: float = 0.00) 
         I = max(0.0, min(1.0, I + random.gauss(0, noise_scale)))
         B = max(0.0, min(1.0, B + random.gauss(0, noise_scale)))
 
-    current_timestamp = base_time + timedelta(days=t)
-    return AgentState(timestamp=current_timestamp, life_preservation=L, entropy=S, node_integrity=I, resource_balance=B)
-
+    return AgentState(
+        timestamp=base_time + timedelta(days=t),
+        life_preservation=L,
+        entropy=S,
+        node_integrity=I,
+        resource_balance=B,
+    )
+    
     # Incremeto de 1 día por paso t para coincidir con las unidades del validador
     current_timestamp = base_time + timedelta(days=t)
 
