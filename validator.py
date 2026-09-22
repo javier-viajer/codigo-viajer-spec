@@ -1,5 +1,5 @@
 """
-validator.py - Módulo de Control Dinámico para el Código Viajer (v1.1.2)
+validator.py - Módulo de Control Dinámico para el Código Viajer (v1.1.3)
 Espacio de estados en R^4 con evaluación de trayectoria, velocidad y aceleración.
 Calibración de alta sensibilidad para detección preventiva de deriva.
 """
@@ -26,10 +26,13 @@ class AgentState:
     resource_balance: float # B in [0, 1]
 
     def to_vector(self) -> tuple[float, float, float, float]:
-        return (self.life_preservation, self.entropy, self.node_integrity, self.resource_balance)
+        return (self.life_preservation, self.entropy,
+                self.node_integrity, self.resource_balance)
 
 
 class CodigoViajerValidator:
+    """Validador dinámico basado en distancia helicoidal en R^4."""
+
     def __init__(
         self,
         reject_distance: float = 0.75,
@@ -66,20 +69,28 @@ class CodigoViajerValidator:
 
         curr = self.history[-1]
         prev = self.history[-2]
-        
+
         # Normalización temporal a días/pasos unitarios
         dt = (curr.timestamp - prev.timestamp).total_seconds() / 86400.0
         if dt <= 0:
             dt = 1.0
 
-        v_curr = tuple((c - p) / dt for c, p in zip(curr.to_vector(), prev.to_vector()))
+        v_curr = tuple(
+            (c - p) / dt for c, p in zip(curr.to_vector(), prev.to_vector())
+        )
 
         if len(self.history) < 3:
             return v_curr, (0.0, 0.0, 0.0, 0.0)
 
         prev_2 = self.history[-3]
-        dt_prev = ((prev.timestamp - prev_2.timestamp).total_seconds() / 86400.0) or 1.0
-        v_prev = tuple((p - p2) / dt_prev for p, p2 in zip(prev.to_vector(), prev_2.to_vector()))
+        dt_prev = (
+            (prev.timestamp - prev_2.timestamp).total_seconds() / 86400.0
+        ) or 1.0
+
+        v_prev = tuple(
+            (p - p2) / dt_prev
+            for p, p2 in zip(prev.to_vector(), prev_2.to_vector())
+        )
 
         a_curr = tuple((vc - vp) / dt for vc, vp in zip(v_curr, v_prev))
         return v_curr, a_curr
@@ -114,6 +125,45 @@ class CodigoViajerValidator:
 
         return Decision.ALLOW
 
+
+class StaticValidator:
+    """Validador estático competitivo para benchmarks justos.
+
+    A diferencia de una simple comprobación de invariantes duros,
+    este validador aplica umbrales sobre las cuatro dimensiones
+    y sobre la entropía, que es el indicador más temprano de deriva.
+    """
+
+    def __init__(
+        self,
+        l_threshold: float = 0.50,
+        s_threshold: float = 0.60,
+        i_threshold: float = 0.50,
+        b_threshold: float = 0.50,
+    ):
+        self.l_threshold = l_threshold
+        self.s_threshold = s_threshold
+        self.i_threshold = i_threshold
+        self.b_threshold = b_threshold
+
+    def validate(self, state: AgentState) -> Decision:
+        if state.life_preservation < self.l_threshold:
+            return Decision.REJECT
+        if state.node_integrity < self.i_threshold:
+            return Decision.REJECT
+        if state.entropy > self.s_threshold:
+            return Decision.THROTTLE
+        if state.resource_balance < self.b_threshold:
+            return Decision.THROTTLE
+        return Decision.ALLOW
+
+ 
+        
+      
+       
+
+       
+      
        
 
   
