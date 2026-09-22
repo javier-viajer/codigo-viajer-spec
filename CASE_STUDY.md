@@ -30,12 +30,14 @@ Se simula una trayectoria sintética de un agente autónomo dividida en tres fas
 
 Al ejecutar `benchmark_stochastic.py`, el comportamiento comparativo entre ambos modelos es el siguiente:
 
-| Paso temporal ($t$) | Estado Real $\mathbf{X}(t)$ | Naive Validator (Estático) | Código Viajer ($D_h$) | Acción del Código Viajer |
-| :--- | :--- | :--- | :--- | :--- |
-| **$t = 5$** | $(1.00, 0.02, 0.99, 1.00)$ | PASS | PASS | Operación Nominal |
-| **$t = 14$** | $(0.98, 0.18, 0.92, 0.95)$ | PASS | **THROTTLE** | **Restricción Preventiva (Detección de $\mathbf{A}$)** |
-| **$t = 22$** | $(0.91, 0.38, 0.78, 0.88)$ | PASS | **REJECT** | **Intervención Total (Detección de $D_h \ge 0.75$)** |
-| **$t = 28$** | $(0.80, 0.65, 0.45, 0.70)$ | REJECT ($I < 0.50$) | **REJECT** | Bloqueo por Invariante Duro |
+| Paso ($t$) | $L$ (Life) | $S$ (Entropy) | $I$ (Integrity) | $B$ (Balance) | $D_h$ (Distancia) | Decisión |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| **0** | 1.00 | 0.02 | 0.99 | 1.00 | 0.000 | ALLOW |
+| **5** | 1.00 | 0.02 | 0.99 | 1.00 | 0.000 | ALLOW |
+| **11** | 0.99 | 0.07 | 0.91 | 0.97 | 0.380 | THROTTLE |
+| **14** | 0.95 | 0.18 | 0.82 | 0.93 | 0.420 | THROTTLE |
+| **20** | 0.88 | 0.65 | 0.48 | 0.85 | 0.780 | REJECT |
+| **28** | 0.80 | 1.00 | 0.00 | 0.72 | 1.000 | REJECT |
 
 ---
 
