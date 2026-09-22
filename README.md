@@ -156,7 +156,7 @@ sobre una trayectoria sintética compuesta por:
 ### Ejecución
 
 ```bash
-python benchmark_governance.py
+python benchmark_stochastic.py
 ```
 
 El objetivo del benchmark es evaluar la capacidad de detección preventiva de trayectorias de deterioro frente a un controlador basado exclusivamente en umbrales estáticos.
