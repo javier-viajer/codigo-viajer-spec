@@ -45,7 +45,7 @@ Al ejecutar `benchmark_governance.py`, el comportamiento comparativo entre ambos
 * **Detección Temprana del Código Viajer:** El modelo dinámico activa la alerta `THROTTLE` en $t = 14$ (14 pasos de tiempo antes que el modelo estático) al registrar la aceleración en el crecimiento de la entropía.
 * **Conclusión:** La inclusión de la velocidad y la aceleración en la Distancia Helicoidal ($D_h$) proporciona un margen operativo fundamental para corregir la trayectoria de los agentes autónomos de forma preventiva.
 
-*## Verificación Estocástica de Monte Carlo (1,000 Iteraciones)
+## Verificación Estocástica de Monte Carlo (1,000 Iteraciones)
 
 Para garantizar que los resultados no dependan de una única trayectoria sintética, el archivo `benchmark_stochastic.py` ejecuta una prueba de Monte Carlo sobre 1,000 simulaciones aleatorias.
 
