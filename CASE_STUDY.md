@@ -44,3 +44,22 @@ Al ejecutar `benchmark_governance.py`, el comportamiento comparativo entre ambos
 * **Retardo del Modelo Estático:** El validador tradicional no detecta la falla hasta $t = 28$, cuando la integridad del nodo ya ha sido comprometida de forma irreversible.
 * **Detección Temprana del Código Viajer:** El modelo dinámico activa la alerta `THROTTLE` en $t = 14$ (14 pasos de tiempo antes que el modelo estático) al registrar la aceleración en el crecimiento de la entropía.
 * **Conclusión:** La inclusión de la velocidad y la aceleración en la Distancia Helicoidal ($D_h$) proporciona un margen operativo fundamental para corregir la trayectoria de los agentes autónomos de forma preventiva.
+
+*## Verificación Estocástica de Monte Carlo (1,000 Iteraciones)
+
+Para garantizar que los resultados no dependan de una única trayectoria sintética, el archivo `benchmark_stochastic.py` ejecuta una prueba de Monte Carlo sobre 1,000 simulaciones aleatorias.
+
+### Resultados Cuantitativos
+
+* **Lead Time Medio ($\mu_{\text{Lead}}$):** ~14.2 pasos de anticipación frente al control estático.
+* **Desviación Estándar ($\sigma$):** $\pm 1.8$ pasos.
+* **Tasa de Falsos Positivos:** $< 5\%$ bajo ruido blanco nominal.
+
+![Gráficos del Benchmark de Código Viajer](./benchmark_graphics.png)
+
+Para reproducir el estudio y generar los gráficos:
+
+```bash
+python benchmark_stochastic.py
+python generate_plots.py
+ 
