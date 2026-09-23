@@ -212,6 +212,69 @@ Estos materiales proporcionan contexto conceptual adicional para la interpretaci
 
 ## Limitaciones conocidas
 
+## Archivos del Proyecto
+
+| Archivo | Propósito |
+|---|---|
+| `validator.py` | Núcleo: `CodigoViajerValidator` (dinámico) y `StaticValidator` (estático) |
+| `benchmark_stochastic.py` | Benchmark de Monte Carlo (1.000 iteraciones) con tabla determinista |
+| `benchmark_regimes.py` | Benchmark multi-régimen: logístico, oscilatorio y abrupto |
+| `sensitivity_analysis.py` | Análisis de sensibilidad de pesos, umbrales y tamaño de histórico |
+| `generate_report.py` | Informe completo en consola, sin dependencias externas |
+| `generate_plots.py` | Versión gráfica del informe (requiere `matplotlib` y `numpy`) |
+| `test_validator.py` | Tests unitarios del validador dinámico y estático |
+| `CASE_STUDY.md` | Caso de estudio reproducible con la trayectoria canónica |
+
+---
+
+## Resultados
+
+### Robustez frente a la forma del fallo
+
+El control dinámico anticipa al validador estático en los tres regímenes
+de fallo evaluados (500 iteraciones de Monte Carlo por régimen;
+`benchmark_regimes.py`):
+
+| Régimen | t THROTTLE dinámico | t REJECT estático | Lead time |
+|---|---|---|---|
+| Logístico (deriva suave) | 15.1 | 32.0 | 16.9 |
+| Oscilatorio (amplitud creciente) | 14.6 | 34.1 | 19.4 |
+| Abrupto (colapso en 5 pasos) | 29.2 | 32.5 | 3.3 |
+
+La anticipación se mantiene positiva en los tres casos. Es máxima en las
+derivas progresiva y oscilatoria (16.9 y 19.4 pasos) y se reduce al mínimo
+(3.3 pasos) en el colapso abrupto, donde el margen temporal disponible es
+intrínsecamente escaso.
+
+### Robustez frente a la calibración
+
+El análisis de sensibilidad (`sensitivity_analysis.py`) evalúa 231
+combinaciones de pesos (w_p, w_v, w_a) con suma 1.0:
+
+- Lead time medio global: 16.43 pasos
+- Rango observado: [15.0, 17.0] pasos
+
+La variación total es de 2 pasos, lo que indica que el resultado no depende
+de la calibración canónica concreta: los pesos pueden redistribuirse dentro
+de una malla amplia sin alterar de forma apreciable la anticipación.
+
+---
+
+## Limitaciones conocidas
+
+- El benchmark usa trayectorias sintéticas diseñadas por el autor; no hay
+  validación sobre datos de agentes reales.
+- El origen de las cuatro dimensiones (L, S, I, B) en un sistema vivo no
+  está especificado. El validador evalúa estados que alguien debe medir
+  previamente.
+- Los pesos y umbrales parten de una calibración inicial; el análisis de
+  sensibilidad mide su influencia sobre el resultado, pero la elección de
+  la malla evaluada sigue siendo del autor.
+- El colapso abrupto limita la anticipación a 3.3 pasos, lo que sugiere que
+  el método ofrece poco margen ante fallos que se consuman en muy pocos
+  pasos.
+
+
 ## Licencia
 
 Este proyecto se distribuye bajo la Licencia MIT.(LICENSE)
