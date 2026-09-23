@@ -274,6 +274,7 @@ de una malla amplia sin alterar de forma apreciable la anticipación.
   el método ofrece poco margen ante fallos que se consuman en muy pocos
   pasos.
 
+| `INTEGRATION.md` | Protocolo de medición de L, S, I y B y gobernanza de la calibración |
 
 ## Licencia
 
