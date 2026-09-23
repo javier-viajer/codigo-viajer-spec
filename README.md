@@ -197,6 +197,21 @@ Estos materiales proporcionan contexto conceptual adicional para la interpretaci
 | `CASE_STUDY.md` | Caso de estudio reproducible con la trayectoria canónica |
 
 
+## Archivos del Proyecto
+
+| Archivo | Propósito |
+|---|---|
+| `validator.py` | Núcleo: `CodigoViajerValidator` (dinámico) y `StaticValidator` (estático) |
+| `benchmark_stochastic.py` | Benchmark de Monte Carlo (1000 iteraciones) con tabla determinista |
+| `benchmark_regimes.py` | Benchmark multi-régimen: logístico, oscilatorio y abrupto |
+| `sensitivity_analysis.py` | Análisis de sensibilidad de pesos, umbrales y tamaño de histórico |
+| `generate_report.py` | Informe completo en consola, sin dependencias externas |
+| `generate_plots.py` | Versión gráfica del informe (requiere `matplotlib` y `numpy`) |
+| `test_validator.py` | 12 tests unitarios |
+| `CASE_STUDY.md` | Caso de estudio reproducible con la trayectoria canónica |
+
+## Limitaciones conocidas
+
 ## Licencia
 
 Este proyecto se distribuye bajo la Licencia MIT.(LICENSE)
