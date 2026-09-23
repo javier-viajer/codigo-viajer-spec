@@ -185,7 +185,17 @@ El presente módulo constituye una implementación experimental inspirada en el 
 
 Estos materiales proporcionan contexto conceptual adicional para la interpretación de los principios y objetivos del proyecto.
 
----
+## Archivos del Proyecto
+
+| Archivo | Propósito |
+|---|---|
+| `validator.py` | Núcleo: `CodigoViajerValidator` (dinámico) y `StaticValidator` (estático) |
+| `benchmark_stochastic.py` | Benchmark de Monte Carlo (1000 iteraciones) con tabla determinista |
+| `generate_report.py` | Informe completo en consola: trayectoria, evolución de D_h y distribución del lead time — sin dependencias externas |
+| `generate_plots.py` | Versión gráfica del informe (requiere `matplotlib` y `numpy`) |
+| `test_validator.py` | 12 tests unitarios. Ejecutar con `python test_validator.py` o `python -m pytest test_validator.py -v` |
+| `CASE_STUDY.md` | Caso de estudio reproducible con la trayectoria canónica |
+
 
 ## Licencia
 
