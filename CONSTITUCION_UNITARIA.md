@@ -191,3 +191,6 @@ La Matriz 22+12, el Código Viajer, la Suma 23 y la Ley 24 se reconocen como mec
 La presente Constitución representa la proyección institucional y filosófica del Código Viajer.
 
 Su inclusión en este repositorio tiene finalidad teórica y exploratoria, sirviendo como puente entre la arquitectura matemática del modelo y una eventual aplicación a sistemas complejos de gobernanza.
+
+La presente propuesta no forma parte de la especificación técnica del Código Viajer ni constituye una validación empírica de sus hipótesis. Su finalidad es explorar posibles traducciones institucionales de los principios de gobernanza preventiva, estabilidad dinámica y detección temprana de deriva desarrollados en el proyecto.
+
