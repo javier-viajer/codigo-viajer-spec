@@ -11,7 +11,7 @@ es leer, comprender y evaluar el repositorio público:
 4. benchmark_regimes.py — tres regímenes de fallo: logístico, oscilatorio, abrupto
 5. sensitivity_analysis.py — barrido de hiperparámetros
 6. generate_report.py — informe de consola autocontenido
-7. generate_plots.py — gráficos matplotlib de la evolución del espacio de estados
+7. test_validator.py — tests unitarios (pytest, 15+ tests, cobertura de invariantes, trayectorias y comparación dinámico vs estático)
 8. CASE_STUDY.md — tabla canónica de trayectoria (36 pasos)
 9. CONSTITUCION_UNITARIA.md — 36 artículos constitucionales derivados del modelo
 10. INTEGRATION.md — protocolo de integración con señales del mundo real
@@ -39,6 +39,7 @@ En 5-7 líneas: qué es el proyecto, qué problema resuelve, cómo lo resuelve.
 - Resume los resultados del benchmark estocástico (lead time medio, desviación, tasa de falsos positivos)
 - Resume los resultados del benchmark multi-régimen (logístico, oscilatorio, abrupto)
 - Resume el análisis de sensibilidad: ¿la ventaja dinámica es robusta frente a cambios en los hiperparámetros?
+- Resume los tests unitarios de test_validator.py: ¿qué comportamientos verifica y con qué cobertura?
 
 ### 4. Aplicabilidad
 - Describe el caso de uso del terremoto en Los Ángeles (INTEGRATION.md)
@@ -57,3 +58,6 @@ En 5-7 líneas: qué es el proyecto, qué problema resuelve, cómo lo resuelve.
 
 Sé riguroso. Lee cada archivo antes de opinar. Si algún archivo no está disponible,
 indícalo y continúa con los demás.
+
+
+
