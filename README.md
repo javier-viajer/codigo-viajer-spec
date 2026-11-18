@@ -189,6 +189,9 @@ Principio de publicación:
 
 ---
 
+Historial de cambios: [`CHANGELOG.md`](./CHANGELOG.md)
+```
+
 ## 7. Licencia y autoría
 
 Distribuido bajo **Licencia MIT**. Ver [`LICENSE`](./LICENSE).
