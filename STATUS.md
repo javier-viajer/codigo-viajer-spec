@@ -21,11 +21,17 @@ Regla de oro:
 ## A) Código Viajer (capa principal)
 
 | Componente | Nivel | Estado |
+
 |------------|:----:|--------|
+
 | Espacio \(\mathbf{X}=(L,S,I,B)\) y decisiones ALLOW/THROTTLE/REJECT | **II** | Operativo y testeado |
+
 | Métrica \(D_h = w_p d_p + w_v d_v + w_a d_a\) | **II** | Definida y calibrada; no es aún geometría helicoidal diferencial completa |
+
 | Invariantes \(L<0.5\), \(I<0.5\) | **II** | Reglas constitucionales del módulo, no leyes empíricas universales |
+
 | Benchmarks sintéticos y sensibilidad | **II** | Reproducibles; no validación sobre agentes reales |
+
 | Protocolo de medición real de \(L,S,I,B\) | **III** | Especificado como integración; pendiente de despliegue empírico |
 
 ---
@@ -33,19 +39,48 @@ Regla de oro:
 ## B) TRCG — núcleos matemáticos
 
 | Módulo / idea | Nivel | Estado y notas |
+
 |---------------|:----:|----------------|
-| Símplex / conservación de masa-probabilidad (`core/simplex.py`) | **II / I-local** | Nivel I solo para hechos estándar de símplex y normalización; no implica dinámica física completa |
-| MaxEnt con momentos lineales (`core/maxent.py`) | **II** | Dual exponencial, Slater y residuales: operativos. La unicidad es la de un problema convexo estándar, no una ley TRCG universal |
-| Jacobiano analítico de campo prototipo (`dynamics/jacobiano.py`) | **II** | \(\gamma_c=1\) es **exacto** para el campo prototipo en el equilibrio \(x=0\); no se exporta como teorema universal sin ese campo |
-| Variedad central / coeficiente cúbico | **II / III** | Resultados locales de forma normal si el campo y no degeneración están fijados; no cierre global automático |
+
+| Símplex / conservación de masa-probabilidad (`core/simplex.py`) | **II / I-local** | Nivel I solo para hechos estándar de símplex y
+
+normalización; no implica dinámica física completa |
+
+| MaxEnt con momentos lineales (`core/maxent.py`) | **II** | Dual exponencial, Slater y residuales: operativos. La unicidad es la de un
+
+problema convexo estándar, no una ley TRCG universal |
+
+| Jacobiano analítico de campo prototipo (`dynamics/jacobiano.py`) | **II** | \(\gamma_c=1\) es **exacto** para el campo prototipo en el
+
+equilibrio \(x=0\); no se exporta como teorema universal sin ese campo |
+
+| Variedad central / coeficiente cúbico | **II / III** | Resultados locales de forma normal si el campo y no degeneración están fijados;
+
+no cierre global automático |
+
 | Cierre tipo Kirkwood / residuos de correlación | **II / III** | Útil como expansión; el residuo debe permanecer explícito |
+
 | Lyapunov local en forma reducida | **II** | Local; extensión global pendiente |
+
 | Torsión antisimétrica / flujo “helicoidal” | **III** | Definición operativa en progreso |
-| Helmholtz–Hodge discreto euclídeo (\(D\), \(P=I-D^\top(DD^\top)^\dagger D\)) | **II** | Proyector algebraico correcto en la malla definida; bordes one-sided explícitos |
-| \(\mathrm{div}_g\) Fisher–Rao / \(D_g\) | **II / III** | Hay formulación ponderada y tests; equivalencia fina con geometría informacional completa aún abierta |
-| Independencia estructural de \(T\) frente a \(R\) vía \(\Delta T=T-\mathcal{M}(R)\) | **II** | Criterio operativo válido; independencia física exige que \(T\) no se defina solo como \(\mathcal{M}(R)\) |
-| Proyector de contorno \(\Pi_{23}\) / Suma 23 (`boundary/`) | **III** | Invariante combinatorio / conjetura activa |
-| Emergencia conjunta necesaria de \(e,\varphi,\pi\) desde un único funcional | **III** | Coherencia parcial en piezas; no demostrada como necesidad única |
+
+| Helmholtz–Hodge discreto euclídeo (\(D\), \(P=I-D^\top(DD^\top)^\dagger D\)) | **II** | Proyector algebraico correcto en la malla
+
+definida; bordes one-sided explícitos |
+
+| \(\mathrm{div}_g\) Fisher–Rao / \(D_g\) | **II / III** | Hay formulación ponderada y tests; equivalencia fina con geometría
+
+informacional completa aún abierta |
+
+| Independencia estructural de \(T\) frente a \(R\) vía \(\Delta T=T-\mathcal{M}(R)\) | **II** | Criterio operativo válido; independencia
+
+física exige que \(T\) no se defina solo como \(\mathcal{M}(R)\) |
+
+| Proyector de contorno \(\Pi_{23}\) / Suma 23 (`boundary/pi_23.py`) | **III** | Invariante combinatorio / conjetura activa |
+
+| Emergencia conjunta necesaria de \(e,\varphi,\pi\) desde un único funcional | **III** | Coherencia parcial en piezas; no demostrada
+
+como necesidad única |
 
 ---
 
