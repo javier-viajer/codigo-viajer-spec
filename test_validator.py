@@ -1,5 +1,5 @@
 """
-test_validator.py — Tests unitarios para el Código Viajer (v1.0.0)
+test_validator.py — Tests unitarios para el Código Viajer (v1.2.0)
 ==================================================================
 Ejecutar con: python -m pytest test_validator.py -v
 O simplemente: python test_validator.py
