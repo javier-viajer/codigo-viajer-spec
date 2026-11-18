@@ -8,7 +8,6 @@ NO AFIRMA: [Ej: No es ley universal de la gravedad ni teorema físico cerrado]
 [Resto del docstring y código...]
 """
 
-```python
 """
 =============================================================================
 TRCG — maxent.py (v1.1, auditable)
