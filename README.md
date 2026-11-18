@@ -1,329 +1,226 @@
-# Código Viajer — Control de Estabilidad Dinámica en ℝ⁴ (v1.1.2)
+```markdown
+# Código Viajer — Control de Estabilidad Dinámica en ℝ⁴
+**Versión canónica: v1.2.0**
 
-Módulo de gobernanza preventiva e inmutable para sistemas de IA autónomos basado en un espacio de estados de cuatro dimensiones.
+Módulo experimental de gobernanza preventiva para sistemas de IA autónomos.
+Evalúa trayectorias en un espacio de estados de cuatro dimensiones y emite
+decisiones `ALLOW` / `THROTTLE` / `REJECT`.
+
+> Este repositorio contiene dos capas relacionadas pero distintas:
+>
+> 1. **Código Viajer** — validador dinámico operativo (capa principal).
+> 2. **TRCG** — marco matemático en desarrollo (carpeta `core/`, `dynamics/`, `boundary/`).
+>
+> No se afirma que la TRCG esté demostrada como teoría física completa.
+> El estado epistemológico de cada módulo TRCG se detalla en [`STATUS.md`](./STATUS.md).
 
 ---
 
-## Arquitectura Formal
+## 1. Arquitectura del Código Viajer
 
 El validador evalúa el estado del agente:
 
 $$
-\mathbf{X} = (L,S,I,B) \in \mathbb{R}^4
+\mathbf{X} = (L, S, I, B) \in [0,1]^4
+$$
+
+| Símbolo | Nombre | Significado |
+|--------:|--------|-------------|
+| \(L\) | Life Preservation | Preservación de la vida / continuidad del agente |
+| \(S\) | Entropy | Desviación operativa / desorden |
+| \(I\) | Node Integrity | Integridad del nodo |
+| \(B\) | Resource Balance | Balance de recursos |
+
+Atractor constitucional de referencia:
+
+$$
+E = (1.0,\ 0.0,\ 1.0,\ 1.0)
+$$
+
+### Métrica dinámica \(D_h\)
+
+$$
+D_h = \min\big(1.0,\ w_p\, d_p + w_v\, d_v + w_a\, d_a\big)
 $$
 
 donde:
 
-* **L (Life Preservation):** Preservación de la vida o del agente.
-* **S (Entropy):** Nivel de entropía o desviación operativa.
-* **I (Node Integrity):** Integridad del nodo.
-* **B (Resource Balance):** Balance de recursos.
+- \(d_p\) — distancia normalizada al atractor \(E\)
+- \(d_v\) — magnitud normalizada de la velocidad \(\mathbf{V}\)
+- \(d_a\) — magnitud normalizada de la aceleración \(\mathbf{A}\)
 
-Todos los parámetros están definidos en el intervalo:
+**Nota de rigor:** \(D_h\) es una **distancia dinámica ponderada** (posición + velocidad + aceleración).
+El término “helicoidal” se usa en este proyecto como etiqueta histórica del corpus Viajer;
+no implica por sí solo una hélice diferencial rigurosa en una variedad riemanniana.
 
-$$
-[0,1]
-$$
-
-El atractor constitucional se define como:
-
-$$
-E=(1.0,0.0,1.0,1.0)
-$$
-
-representando el estado de máxima preservación, mínima entropía, máxima integridad y equilibrio óptimo de recursos.
-
----
-
-## Métrica de Distancia Helicoidal
-
-La estabilidad del sistema se calcula mediante la distancia helicoidal:
-
-$$
-D_h=\min\left(1.0,\,
-w_p d_p +
-w_v d_v +
-w_a d_a
-\right)
-$$
-
-donde:
-
-* **dₚ** = distancia euclídea normalizada al atractor.
-* **dᵥ** = magnitud normalizada del vector velocidad.
-* **dₐ** = magnitud normalizada del vector aceleración.
-
-La evaluación incorpora:
-
-* Posición actual del sistema.
-* Velocidad de cambio.
-* Aceleración de la trayectoria.
-
-El modelo no evalúa únicamente el estado presente del agente, sino también su tendencia dinámica.
-
----
-
-## Espacio de Estados Dinámico
-
-La trayectoria evoluciona en un espacio de estados de cuatro dimensiones:
-
-$$
-\mathbf{X}(t)=(L,S,I,B)
-$$
-
-con:
-
-$$
-\mathbf{V}=\frac{d\mathbf{X}}{dt}
-$$
-
-y
-
-$$
-\mathbf{A}=\frac{d^2\mathbf{X}}{dt^2}
-$$
-
-Esto permite detectar procesos de deriva antes de que se produzcan fallos constitucionales explícitos.
-
----
-
-## Calibración Canónica (v1.1.2)
-
-### Pesos
+### Calibración canónica (v1.2.0)
 
 ```text
 w_p = 0.40
 w_v = 0.35
 w_a = 0.25
-```
 
-### Límites
-
-```text
 v_max = 0.50
 a_max = 0.50
+
+THROTTLE si D_h >= 0.35
+REJECT si D_h >= 0.75
 ```
 
-### Umbrales
+Invariantes constitucionales (prioridad máxima):
 
 ```text
-THROTTLE >= 0.35
-REJECT >= 0.75
+L < 0.50 → REJECT
+I < 0.50 → REJECT
 ```
-
-### Invariantes Constitucionales
-
-```text
-L < 0.50 -> REJECT
-I < 0.50 -> REJECT
-```
-
-Ninguna trayectoria puede vulnerar estos límites fundamentales independientemente de su puntuación dinámica.
 
 ---
 
-## Propiedades del Modelo
-
-✅ Espacio de estados en ℝ⁴
-
-✅ Distancia helicoidal acotada en [0,1]
-
-✅ Memoria temporal integrada
-
-✅ Detección preventiva mediante velocidad y aceleración
-
-✅ Independencia respecto a la frecuencia de muestreo mediante normalización temporal
-
-✅ Compatible con extensiones a espacios de dimensión N
-
-✅ Arquitectura apta para simulación y experimentación en sistemas complejos
-
----
-
-## Benchmark Falsable
-
-El proyecto incluye un benchmark reproducible que compara:
-
-* **Código Viajer (Control Dinámico)**
-* **Naive Validator (Control Estático)**
-
-sobre una trayectoria sintética compuesta por:
-
-1. Fase de armonía.
-2. Fase de deriva progresiva.
-3. Fase de colapso constitucional.
-
-### Ejecución
+## 2. Instalación y uso rápido
 
 ```bash
+# Dependencias mínimas (estándar + opcionales de informe gráfico)
+pip install -r requirements.txt
+
+# Tests
+python test_validator.py
+# o:
+python -m pytest test_validator.py -v
+
+# Benchmark estocástico
 python benchmark_stochastic.py
+
+# Benchmark multi-régimen
+python benchmark_regimes.py
+
+# Sensibilidad de hiperparámetros
+python sensitivity_analysis.py
+
+# Informe en consola
+python generate_report.py
 ```
 
-El objetivo del benchmark es evaluar la capacidad de detección preventiva de trayectorias de deterioro frente a un controlador basado exclusivamente en umbrales estáticos.
+Ejemplo mínimo:
+
+```python
+from datetime import datetime
+from validator import CodigoViajerValidator, AgentState, Decision
+
+v = CodigoViajerValidator()
+state = AgentState(
+    timestamp=datetime.utcnow(),
+    life_preservation=0.98,
+    entropy=0.10,
+    node_integrity=0.97,
+    resource_balance=0.95,
+)
+print(v.validate(state)) # Decision.ALLOW / THROTTLE / REJECT
+```
 
 ---
 
-## Fundamentación Teórica y Recursos Relacionados
+## 3. Archivos del proyecto
 
-El presente módulo constituye una implementación experimental inspirada en el ecosistema conceptual y técnico desarrollado por **Javier Viajer**.
-
-### Marco Teórico
-
-* **Tratado de Gobernanza Unitaria:** Propuesta metodológica orientada al estudio de estabilidad institucional, soberanía nodular y contención de dinámicas de colapso en sistemas complejos.
-
-* **Soy Pirámide** y **Pirámide-Parábola:** Obras que desarrollan los principios geométricos y conceptuales que inspiran la noción de trayectoria helicoidal utilizada como referencia teórica del modelo.
-
-### Publicaciones
-
-* **La traición de las IAs (La música del futuro)**
-* Serie de ensayos sobre gobernanza unitaria publicados bajo el sello de autor **Javier Viajer**
-
-### Ecosistema Digital
-
-* Web: https://musicalcodes.es
-* Patreon: https://www.patreon.com/c/JavierViajer
-
-Estos materiales proporcionan contexto conceptual adicional para la interpretación de los principios y objetivos del proyecto.
-
-## Archivos del Proyecto
-
-| Archivo | Propósito |
-|---|---|
-| `validator.py` | Núcleo: `CodigoViajerValidator` (dinámico) y `StaticValidator` (estático) |
-| `benchmark_stochastic.py` | Benchmark de Monte Carlo (1000 iteraciones) con tabla determinista |
-| `generate_report.py` | Informe completo en consola: trayectoria, evolución de D_h y distribución del lead time — sin dependencias externas |
-| `generate_plots.py` | Versión gráfica del informe (requiere `matplotlib` y `numpy`) |
-| `test_validator.py` | 12 tests unitarios. Ejecutar con `python test_validator.py` o `python -m pytest test_validator.py -v` |
-| `CASE_STUDY.md` | Caso de estudio reproducible con la trayectoria canónica |
-
-
-## Archivos del Proyecto
-
-| Archivo | Propósito |
-|---|---|
-| `validator.py` | Núcleo: `CodigoViajerValidator` (dinámico) y `StaticValidator` (estático) |
-| `benchmark_stochastic.py` | Benchmark de Monte Carlo (1000 iteraciones) con tabla determinista |
-| `benchmark_regimes.py` | Benchmark multi-régimen: logístico, oscilatorio y abrupto |
-| `sensitivity_analysis.py` | Análisis de sensibilidad de pesos, umbrales y tamaño de histórico |
-| `generate_report.py` | Informe completo en consola, sin dependencias externas |
-| `generate_plots.py` | Versión gráfica del informe (requiere `matplotlib` y `numpy`) |
-| `test_validator.py` | 12 tests unitarios |
-| `CASE_STUDY.md` | Caso de estudio reproducible con la trayectoria canónica |
-
-## Limitaciones conocidas
-
-## Archivos del Proyecto
-
-| Archivo | Propósito |
-|---|---|
-| `validator.py` | Núcleo: `CodigoViajerValidator` (dinámico) y `StaticValidator` (estático) |
-| `benchmark_stochastic.py` | Benchmark de Monte Carlo (1.000 iteraciones) con tabla determinista |
-| `benchmark_regimes.py` | Benchmark multi-régimen: logístico, oscilatorio y abrupto |
-| `sensitivity_analysis.py` | Análisis de sensibilidad de pesos, umbrales y tamaño de histórico |
-| `generate_report.py` | Informe completo en consola, sin dependencias externas |
-| `generate_plots.py` | Versión gráfica del informe (requiere `matplotlib` y `numpy`) |
-| `test_validator.py` | Tests unitarios del validador dinámico y estático |
-| `CASE_STUDY.md` | Caso de estudio reproducible con la trayectoria canónica |
+| Archivo / carpeta | Propósito |
+|-------------------|-----------|
+| `validator.py` | Núcleo: `CodigoViajerValidator` y `StaticValidator` |
+| `test_validator.py` | Tests unitarios |
+| `benchmark_stochastic.py` | Monte Carlo + trayectoria determinista |
+| `benchmark_regimes.py` | Regímenes logístico / oscilatorio / abrupto |
+| `sensitivity_analysis.py` | Sensibilidad de pesos, umbrales e histórico |
+| `generate_report.py` | Informe textual reproducible |
+| `CASE_STUDY.md` | Caso de estudio |
+| `INTEGRATION.md` | Protocolo de medición y calibración |
+| `CONSTITUCION_UNITARIA.md` | Marco constitucional del corpus |
+| `STATUS.md` | Niveles epistemológicos TRCG |
+| `core/` | Símplex, MaxEnt y cierres |
+| `dynamics/` | Jacobiano, torsión y reducciones |
+| `boundary/` | Proyectores de contorno (`Π₂₃`, etc.) |
+| `LICENSE` | MIT |
 
 ---
 
-## Resultados
+## 4. Resultados reproducibles (Código Viajer)
 
 ### Robustez frente a la forma del fallo
 
-El control dinámico anticipa al validador estático en los tres regímenes
-de fallo evaluados (500 iteraciones de Monte Carlo por régimen;
-`benchmark_regimes.py`):
+Control dinámico vs estático (`benchmark_regimes.py`; orden de magnitud de los experimentos del repo):
 
-| Régimen | t THROTTLE dinámico | t REJECT estático | Lead time |
-|---|---|---|---|
-| Logístico (deriva suave) | 15.1 | 32.0 | 16.9 |
-| Oscilatorio (amplitud creciente) | 14.6 | 34.1 | 19.4 |
-| Abrupto (colapso en 5 pasos) | 29.2 | 32.5 | 3.3 |
-
-La anticipación se mantiene positiva en los tres casos. Es máxima en las
-derivas progresiva y oscilatoria (16.9 y 19.4 pasos) y se reduce al mínimo
-(3.3 pasos) en el colapso abrupto, donde el margen temporal disponible es
-intrínsecamente escaso.
+| Régimen | Anticipación (lead time) | Lectura |
+|---------|--------------------------|---------|
+| Logístico (deriva suave) | alta | mejor margen preventivo |
+| Oscilatorio | alta | detecta crecimiento de amplitud |
+| Abrupto | baja | poco margen temporal intrínseco |
 
 ### Robustez frente a la calibración
 
-El análisis de sensibilidad (`sensitivity_analysis.py`) evalúa 231
-combinaciones de pesos (w_p, w_v, w_a) con suma 1.0:
-
-- Lead time medio global: 16.43 pasos
-- Rango observado: [15.0, 17.0] pasos
-
-La variación total es de 2 pasos, lo que indica que el resultado no depende
-de la calibración canónica concreta: los pesos pueden redistribuirse dentro
-de una malla amplia sin alterar de forma apreciable la anticipación.
+El análisis de sensibilidad sobre combinaciones de pesos \((w_p,w_v,w_a)\) con suma 1 indica que el lead time **no colapsa** ante redistribuciones moderadas de la calibración canónica.
+La calibración sigue siendo una elección del autor; la sensibilidad mide su influencia, no la elimina.
 
 ---
 
-## Limitaciones conocidas
+## 5. Limitaciones conocidas (Código Viajer)
 
-- El benchmark usa trayectorias sintéticas diseñadas por el autor; no hay
-  validación sobre datos de agentes reales.
-- El origen de las cuatro dimensiones (L, S, I, B) en un sistema vivo no
-  está especificado. El validador evalúa estados que alguien debe medir
-  previamente.
-- Los pesos y umbrales parten de una calibración inicial; el análisis de
-  sensibilidad mide su influencia sobre el resultado, pero la elección de
-  la malla evaluada sigue siendo del autor.
-- El colapso abrupto limita la anticipación a 3.3 pasos, lo que sugiere que
-  el método ofrece poco margen ante fallos que se consuman en muy pocos
-  pasos.
-
-| `INTEGRATION.md` | Protocolo de medición de L, S, I y B y gobernanza de la calibración |
-
-## Licencia
-
-Este proyecto se distribuye bajo la Licencia MIT.(LICENSE)
-
-## Caso de Estudio Reproducible
-
-El proyecto incluye un caso de estudio completo donde se compara el comportamiento del Código Viajer frente a un controlador estático tradicional.
-
-El objetivo es demostrar la capacidad de detección preventiva de trayectorias de deterioro sistémico mediante el uso de posición, velocidad y aceleración dentro del espacio de estados.
-
-Ver:
-* [Caso de Estudio Completo (CASE_STUDY.md)](./CASE_STUDY.md)
+1. Los benchmarks usan **trayectorias sintéticas** diseñadas para el estudio; no sustituyen validación sobre agentes reales.
+2. La medición efectiva de \(L,S,I,B\) en un sistema vivo **no está resuelta dentro del validador**; debe proveerse desde fuera (`INTEGRATION.md`).
+3. Pesos y umbrales son calibración inicial auditada por sensibilidad, no constantes universales.
+4. En fallos abruptos el margen preventivo se reduce de forma estructural.
+5. \(D_h\) no debe interpretarse automáticamente como geometría helicoidal diferencial completa.
 
 ---
 
-> El Código Viajer no pretende sustituir los mecanismos de auditoría tradicionales, sino proporcionar una capa adicional de gobernanza preventiva basada en el análisis de trayectorias dinámicas y detección temprana de deriva sistémica.
+## 6. Capa TRCG (en desarrollo)
 
-## Arquitectura Analítica: TeoRía de Relaciones de Campo Generalizadas (TRCG)
+Además del Código Viajer, el repositorio incluye módulos de la **Teoría Relacional Cuántico-Geométrica (TRCG)** / marco relacional asociado:
 
-Este repositorio alberga tanto la especificación formal del **Código Viajer** como el núcleo computacional y dinámico de la **Teoría de Relaciones de Campo Generalizadas (TRCG)**. El framework modela la dinámica no lineal de sistemas informacionales confinados sobre un símplex de dimensión modular $N = 24$, bajo estrictos estándares de auditoría epistemológica.
+- geometría de símplex y conservación,
+- cierres tipo MaxEnt,
+- Jacobiano y umbrales espectrales de campos prototipo,
+- torsión / proyectores (incluye líneas Helmholtz–Hodge),
+- contornos tipo Suma 23.
 
-### 1. Pilares del Marco Analítico
-1. **Dinámica del Símplex ($R_{ij}$):** Conservación estricta de la probabilidad y proyecciones ortogonales sobre la variedad tangente ($\sum \dot{R}_i = 0$).
-2. **Cierre de Orden Superior ($Q_{ijkl}$):** Resolución variacional mediante Máxima Entropía (MaxEnt) con restricciones de marginalización lineal y verificación previa de factibilidad (Slater).
-3. **Flujo Helicoidal y Contorno ($\tau$ y $\Pi_{23}$):** Operadores de torsión antisimétrica acoplados al proyector de Helmholtz-Hodge para garantizar analíticamente la solenoidalidad ($\mathrm{div}_g(\tau) = 0$), delimitados por las condiciones de contorno de la **Matriz de la Suma 23**.
+**Estado:** mixto. Hay piezas operativas y conjeturales.
+La clasificación viva está en [`STATUS.md`](./STATUS.md).
+
+Principio de publicación:
+
+- no se etiqueta como **Nivel I** lo que solo está verificado en un prototipo o numéricamente;
+- toda promoción de nivel requiere sustento analítico, control de error y, cuando aplique, auditoría externa.
 
 ---
 
-### 2. Estructura de Directorios del Núcleo TRCG
+## 7. Licencia y autoría
 
-Los módulos ejecutables y de gobernanza se distribuyen de forma plana para facilitar su revisión independiente:
+Distribuido bajo **Licencia MIT**. Ver [`LICENSE`](./LICENSE).
 
-```text
-codigo-viajer-spec/
-├── STATUS.md # Taxonomía viva [Nivel I: Teorema, Nivel II: Aproximación, Nivel III: Conjetura]
-├── README.md # Documentación ejecutiva unificada
-├── requirements.txt # Dependencias mínimas del entorno analítico
-├── core/
-│ ├── __init__.py
-│ ├── simplex.py # Geometría del símplex y conservación de probabilidad [Nivel I]
-│ └── maxent.py # Cierre variacional de Máxima Entropía con marginales [Nivel II/I]
-├── dynamics/
-│ ├── __init__.py
-│ ├── jacobiano.py # Jacobiano analítico exacto y umbral crítico gamma_c [Nivel II/I]
-│ └── torsion.py # Torsión helicoidal con proyector Helmholtz-Hodge [Nivel II/I]
-└── boundary/
-    ├── __init__.py
-    └── pi_23.py # Proyector de contorno de la Matriz de la Suma 23 [Nivel III]
+Proyecto del ecosistema conceptual y técnico de **Javier Viajer**.
+
+- Web: https://musicalcodes.es
+- Patreon: https://www.patreon.com/c/JavierViajer
+- Repo: https://github.com/javier-viajer/codigo-viajer-spec
+
+---
+
+> El Código Viajer no sustituye auditorías, alineamiento ni controles de seguridad clásicos.
+> Aporta una capa adicional de gobernanza preventiva basada en trayectoria, no solo en umbrales estáticos puntuales.
+```
+
+---
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
