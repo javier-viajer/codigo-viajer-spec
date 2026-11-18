@@ -9,7 +9,7 @@ NO AFIRMA: [Ej: No es ley universal de la gravedad ni teorema físico cerrado]
 """
 
 ```text
-TRCG — Auditoría Helmholtz–Hodge discreta v1.1
+TRCG — Auditoría Helmholtz–Hodge discreta v1.2.0
 (Euclídea + Fisher ponderada D_g)
 
 Respuesta al panel de 4º Factor:
@@ -29,7 +29,7 @@ import numpy as np
 from numpy.linalg import norm, pinv, matrix_rank, svd
 
 # ============================================================
-# TRCG | Helmholtz–Hodge discreto v1.1
+# TRCG | Helmholtz–Hodge discreto v1.2.0
 # D (euclídeo) y D_g (Fisher ponderado)
 # ============================================================
 
