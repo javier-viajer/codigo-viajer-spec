@@ -293,6 +293,37 @@ Ver:
 
 > El Código Viajer no pretende sustituir los mecanismos de auditoría tradicionales, sino proporcionar una capa adicional de gobernanza preventiva basada en el análisis de trayectorias dinámicas y detección temprana de deriva sistémica.
 
+## Arquitectura Analítica: TeoRía de Relaciones de Campo Generalizadas (TRCG)
+
+Este repositorio alberga tanto la especificación formal del **Código Viajer** como el núcleo computacional y dinámico de la **Teoría de Relaciones de Campo Generalizadas (TRCG)**. El framework modela la dinámica no lineal de sistemas informacionales confinados sobre un símplex de dimensión modular $N = 24$, bajo estrictos estándares de auditoría epistemológica.
+
+### 1. Pilares del Marco Analítico
+1. **Dinámica del Símplex ($R_{ij}$):** Conservación estricta de la probabilidad y proyecciones ortogonales sobre la variedad tangente ($\sum \dot{R}_i = 0$).
+2. **Cierre de Orden Superior ($Q_{ijkl}$):** Resolución variacional mediante Máxima Entropía (MaxEnt) con restricciones de marginalización lineal y verificación previa de factibilidad (Slater).
+3. **Flujo Helicoidal y Contorno ($\tau$ y $\Pi_{23}$):** Operadores de torsión antisimétrica acoplados al proyector de Helmholtz-Hodge para garantizar analíticamente la solenoidalidad ($\mathrm{div}_g(\tau) = 0$), delimitados por las condiciones de contorno de la **Matriz de la Suma 23**.
+
+---
+
+### 2. Estructura de Directorios del Núcleo TRCG
+
+Los módulos ejecutables y de gobernanza se distribuyen de forma plana para facilitar su revisión independiente:
+
+```text
+codigo-viajer-spec/
+├── STATUS.md # Taxonomía viva [Nivel I: Teorema, Nivel II: Aproximación, Nivel III: Conjetura]
+├── README.md # Documentación ejecutiva unificada
+├── requirements.txt # Dependencias mínimas del entorno analítico
+├── core/
+│ ├── __init__.py
+│ ├── simplex.py # Geometría del símplex y conservación de probabilidad [Nivel I]
+│ └── maxent.py # Cierre variacional de Máxima Entropía con marginales [Nivel II/I]
+├── dynamics/
+│ ├── __init__.py
+│ ├── jacobiano.py # Jacobiano analítico exacto y umbral crítico gamma_c [Nivel II/I]
+│ └── torsion.py # Torsión helicoidal con proyector Helmholtz-Hodge [Nivel II/I]
+└── boundary/
+    ├── __init__.py
+    └── pi_23.py # Proyector de contorno de la Matriz de la Suma 23 [Nivel III]
 
 
 
