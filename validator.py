@@ -1,5 +1,5 @@
 """
-validator.py - Módulo de Control Dinámico para el Código Viajer (v1.1.3)
+validator.py - Módulo de Control Dinámico para el Código Viajer (v1.2.0)
 Espacio de estados en R^4 con evaluación de trayectoria, velocidad y aceleración.
 Calibración de alta sensibilidad para detección preventiva de deriva.
 """
