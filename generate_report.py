@@ -302,7 +302,7 @@ def print_summary():
 
     mean_lead, std_lead, fp_rate, _ = run_monte_carlo(1000)
 
-    print(f" Versión del validador: CodigoViajerValidator v1.1.3")
+    print(f" Versión del validador: CodigoViajerValidator v1.2.0")
     print(f" Validador estático: StaticValidator (4 umbrales)")
     print(f" Iteraciones Monte Carlo: 1,000")
     print(f" Lead Time medio: {mean_lead:.1f} ± {std_lead:.1f} pasos")
