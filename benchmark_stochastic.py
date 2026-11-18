@@ -1,10 +1,10 @@
 """
-Código Viajer — Benchmark Estocástico de Monte Carlo (v1.1.6)
+Código Viajer — Benchmark Estocástico de Monte Carlo (v1.2.0)
 =============================================================
 Evaluación cuantitativa alineada con CASE_STUDY.md y
 compatible con la interfaz y unidades canónicas de validator.py.
 
-Correcciones respecto a v1.1.5:
+Correcciones respecto a v1.2.0:
 - Eliminado código inalcanzable en generate_trajectory.
 - Corregida la indentación.
 - El validador estático ahora usa StaticValidator (umbrales en las 4 dimensiones),
@@ -118,7 +118,7 @@ def print_single_run_table():
     base_time = datetime.now()
 
     print("=" * 75)
-    print(" CÓDIGO VIAJER — VERIFICACIÓN DE TRAYECTORIA DETERMINISTA (v1.1.6)")
+    print(" CÓDIGO VIAJER — VERIFICACIÓN DE TRAYECTORIA DETERMINISTA (v1.2.0)")
     print("=" * 75)
     print(f"{'Paso (t)':<10}{'L':<8}{'S':<8}{'I':<8}{'B':<8}{'Dh':<10}{'Decisión':<12}")
     print("-" * 75)
