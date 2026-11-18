@@ -64,10 +64,6 @@ no cierre global automático |
 
 | Torsión antisimétrica / flujo “helicoidal” | **III** | Definición operativa en progreso |
 
-| Helmholtz–Hodge discreto euclídeo (\(D\), \(P=I-D^\top(DD^\top)^\dagger D\)) | **II** | Proyector algebraico correcto en la malla
-
-definida; bordes one-sided explícitos |
-
 | \(\mathrm{div}_g\) Fisher–Rao / \(D_g\) | **II / III** | Hay formulación ponderada y tests; equivalencia fina con geometría
 
 informacional completa aún abierta |
