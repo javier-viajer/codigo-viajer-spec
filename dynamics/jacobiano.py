@@ -1,17 +1,7 @@
-"""
-=============================================================================
-[Nombre del Módulo] — TRCG v1.2.0
-STATUS: Nivel II (operativo y auditable / prototipo analítico)
-SUPUESTO: [Ej: Campo prototipo no lineal / optimización convexa de momentos]
-NO AFIRMA: [Ej: No es ley universal de la gravedad ni teorema físico cerrado]
------------------------------------------------------------------------------
-[Resto del docstring y código...]
-"""
-
 ```python
 """
 =============================================================================
-TRCG — jacobiano.py (v1.1, auditable)
+TRCG — jacobiano.py (v1.2.0, auditable)
 Jacobiano analítico, espectro local y umbral de bifurcación
 
 ESTATUS: Nivel II (operativo + contraste analítico/numérico).
