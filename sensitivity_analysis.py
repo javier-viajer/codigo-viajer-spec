@@ -1,5 +1,5 @@
 """
-Código Viajer — Análisis de Sensibilidad de Hiperparámetros (v1.0.0)
+Código Viajer — Análisis de Sensibilidad de Hiperparámetros (v1.2.0)
 ====================================================================
 Responde a la pregunta: ¿el lead time del Código Viajer es robusto, o
 depende de la calibración canónica (w_p=0.40, w_v=0.35, w_a=0.25)?
