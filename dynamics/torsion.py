@@ -8,7 +8,6 @@ NO AFIRMA: [Ej: No es ley universal de la gravedad ni teorema físico cerrado]
 [Resto del docstring y código...]
 """
 
-```text
 TRCG — Auditoría Helmholtz–Hodge discreta v1.2.0
 (Euclídea + Fisher ponderada D_g)
 
@@ -24,7 +23,6 @@ Respuesta al panel de 4º Factor:
 Dependencia: numpy
 ```
 
-```python
 import numpy as np
 from numpy.linalg import norm, pinv, matrix_rank, svd
 
