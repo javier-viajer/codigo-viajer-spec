@@ -1,4 +1,4 @@
-### Modelo Pirámide-Parábola (`v1.2`)
+### Modelo Pirámide-Parábola (`v1.2.0`)
 
 | Módulo / idea | Nivel | Estado y notas |
 |---------------|:----:|----------------|
