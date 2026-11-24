@@ -210,6 +210,19 @@ Proyecto del ecosistema conceptual y técnico de **Javier Viajer**.
 
 ---
 
+Relación con TRCG
+
+Este repositorio contiene la especificación operativa de Código Viajer en cuatro dimensiones (4D), incluyendo el modelo de estado, la distancia dinámica y el validador.
+
+El desarrollo matemático relacionado se mantiene en un repositorio independiente:
+
+"TRCG Código Viajer Spec" (https://github.com/javier-viajer/trgc-codigo-viajer-spec)
+
+TRCG contiene la investigación del núcleo de 24 dimensiones y la línea experimental de 47 dimensiones.
+
+Ambos proyectos comparten una línea conceptual, pero sus modelos no deben considerarse transformaciones matemáticas equivalentes sin una demostración formal.
+
+Consulta "REPOSITORY_RELATIONSHIP.md" (./REPOSITORY_RELATIONSHIP.md) para conocer la separación de responsabilidades y los criterios de integración. 
 
 
 
